@@ -1,6 +1,11 @@
 "use client";
 
 import {
+  addMinutes,
+  CALENDAR_COLORS,
+  useCalendar
+} from "@illostack/react-calendar";
+import {
   CalendarPlusIcon,
   CheckIcon,
   ClipboardIcon,
@@ -21,16 +26,12 @@ import {
 } from "@illostack/react-calendar-ui";
 import * as React from "react";
 
-import { CALENDAR_COLORS } from "../lib/calendar";
-import { addMinutes } from "../lib/time";
-import { useCalendar } from "./calendar";
-
-interface CalendarContextMenuProps
+interface CalendarDayContextMenuProps
   extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-const CalendarContextMenu: React.FC<CalendarContextMenuProps> = ({
+const CalendarDayContextMenu: React.FC<CalendarDayContextMenuProps> = ({
   children
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -183,6 +184,6 @@ const CalendarContextMenu: React.FC<CalendarContextMenuProps> = ({
     </ContextMenu>
   );
 };
-CalendarContextMenu.displayName = "CalendarContextMenu";
+CalendarDayContextMenu.displayName = "CalendarDayContextMenu";
 
-export { CalendarContextMenu };
+export { CalendarDayContextMenu };
