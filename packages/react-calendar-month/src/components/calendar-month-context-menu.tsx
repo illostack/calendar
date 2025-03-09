@@ -53,7 +53,19 @@ const CalendarMonthContextMenu: React.FC<CalendarMonthContextMenuProps> = ({
       return;
     }
 
-    calendar.pasteEvent({ startAt: activeSection.startAt });
+    const startAt = new Date(activeSection.startAt);
+
+    if (cuttedEvent) {
+      startAt.setHours(cuttedEvent.startAt.getHours());
+      startAt.setMinutes(cuttedEvent.startAt.getMinutes());
+    }
+
+    if (copiedEvent) {
+      startAt.setHours(copiedEvent.startAt.getHours());
+      startAt.setMinutes(copiedEvent.startAt.getMinutes());
+    }
+
+    calendar.pasteEvent({ startAt });
   }, [calendar]);
 
   const handleCreate = React.useCallback(() => {
