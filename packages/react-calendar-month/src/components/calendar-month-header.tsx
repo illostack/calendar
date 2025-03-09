@@ -23,14 +23,14 @@ const CalendarMonthHeader = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "grid h-9 w-full flex-none grid-cols-7 items-center border-b",
+        "grid h-12 w-full flex-none grid-cols-7 items-center border-b",
         className
       )}
       {...props}
     >
       {dates.map((_, i) => (
         <div key={i} className="flex justify-center">
-          <h3 className="ccalendartalize text-xs font-semibold">
+          <h3 className="text-xs font-semibold capitalize">
             {translations.calendar.days[((weekStartsOn + i) % 7) as 0]}
           </h3>
         </div>

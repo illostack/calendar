@@ -19,7 +19,9 @@ const CalendarMonthActiveSectionIndicator =
         [date, activeSection]
       );
 
-      if (!isSameDate) return null;
+      if (!isSameDate) {
+        return null;
+      }
 
       return (
         <div

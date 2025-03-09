@@ -107,7 +107,6 @@ const CalendarDayDndProvider = React.memo(
           calendar
         );
 
-        // Prevent updating the event if the startAt and endAt are the same
         if (
           startAt.getTime() === calendarEvent.startAt.getTime() &&
           endAt.getTime() === calendarEvent.endAt.getTime()

@@ -39,7 +39,9 @@ const useCalendarDayResize = () => {
               calendar
             );
 
-            if (startAt >= resizingEvent.endAt) return;
+            if (startAt >= resizingEvent.endAt) {
+              return;
+            }
 
             calendar.updateResizing({
               ...resizingEvent,
@@ -58,7 +60,9 @@ const useCalendarDayResize = () => {
               calendar
             );
 
-            if (endAt <= resizingEvent.startAt) return;
+            if (endAt <= resizingEvent.startAt) {
+              return;
+            }
 
             calendar.updateResizing({
               ...resizingEvent,

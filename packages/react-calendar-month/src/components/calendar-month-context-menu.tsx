@@ -1,6 +1,11 @@
 "use client";
 
 import {
+  addDays,
+  CALENDAR_COLORS,
+  useCalendar
+} from "@illostack/react-calendar";
+import {
   CalendarPlusIcon,
   CheckIcon,
   ClipboardIcon,
@@ -21,16 +26,12 @@ import {
 } from "@illostack/react-calendar-ui";
 import * as React from "react";
 
-import { CALENDAR_COLORS } from "../lib/calendar";
-import { addMinutes } from "../lib/time";
-import { useCalendar } from "./calendar";
-
-interface CalendarContextMenuProps
+interface CalendarMonthContextMenuProps
   extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-const CalendarContextMenu: React.FC<CalendarContextMenuProps> = ({
+const CalendarMonthContextMenu: React.FC<CalendarMonthContextMenuProps> = ({
   children
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -63,8 +64,7 @@ const CalendarContextMenu: React.FC<CalendarContextMenuProps> = ({
     }
 
     const startAt = activeSection.startAt;
-    const defaultDuration = calendar.getDefaultEventDuration();
-    const endAt = addMinutes(startAt, defaultDuration);
+    const endAt = addDays(startAt, 1);
 
     calendar.openCreationForm({ startAt, endAt });
   }, [calendar]);
@@ -183,6 +183,6 @@ const CalendarContextMenu: React.FC<CalendarContextMenuProps> = ({
     </ContextMenu>
   );
 };
-CalendarContextMenu.displayName = "CalendarContextMenu";
+CalendarMonthContextMenu.displayName = "CalendarMonthContextMenu";
 
-export { CalendarContextMenu };
+export { CalendarMonthContextMenu };

@@ -185,7 +185,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
           </div>
         </div>
       )}
-      <h1 className="first-letter:ccalendartalize select-none text-lg font-semibold">
+      <h1 className="select-none text-lg font-semibold first-letter:capitalize">
         {title}
       </h1>
       {!!isLoading && (

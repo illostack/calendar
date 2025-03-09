@@ -1,9 +1,11 @@
 "use client";
 
-import { rowToTime, useCalendar } from "@illostack/react-calendar";
+import { useCalendar } from "@illostack/react-calendar";
 import * as React from "react";
 
-const useCalendarDayResize = () => {
+import { computeEventTimeRangeFromPointer } from "../lib/utils";
+
+const useCalendarMonthResize = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const calendar = useCalendar();
 
@@ -20,27 +22,30 @@ const useCalendarDayResize = () => {
         return;
       }
 
-      const handleResize = (e: MouseEvent) => {
+      const handleResize = (event: MouseEvent) => {
         const resizingEvent = calendar.getResizingEvent();
-        if (!resizingEvent) return;
 
-        const rect = containerRef.current?.getBoundingClientRect();
-        if (!rect) return;
+        if (!resizingEvent) {
+          return;
+        }
 
-        const y = e.clientY - rect.top;
         const isResizingTop = calendar.getIsResizingTop();
 
         if (isResizingTop) {
           requestAnimationFrame(() => {
-            const { totalRows } = calendar.getLayout();
+            const { startAt } = computeEventTimeRangeFromPointer(
+              event,
+              container,
+              calendar
+            );
 
-            const row = Math.max(Math.floor((y / rect.height) * totalRows), 0);
-            const newStartAt = rowToTime(resizingEvent.startAt, row, calendar);
-            if (newStartAt >= resizingEvent.endAt) return;
+            if (startAt >= resizingEvent.endAt) {
+              return;
+            }
 
             calendar.updateResizing({
               ...resizingEvent,
-              startAt: newStartAt
+              startAt
             });
           });
         }
@@ -49,17 +54,19 @@ const useCalendarDayResize = () => {
 
         if (isResizingBottom) {
           requestAnimationFrame(() => {
-            const { totalRows } = calendar.getLayout();
-            const row = Math.min(
-              Math.floor((y / rect.height) * totalRows),
-              totalRows
+            const { endAt } = computeEventTimeRangeFromPointer(
+              event,
+              container,
+              calendar
             );
-            const newEndAt = rowToTime(resizingEvent.startAt, row, calendar);
-            if (newEndAt <= resizingEvent.startAt) return;
+
+            if (endAt <= resizingEvent.startAt) {
+              return;
+            }
 
             calendar.updateResizing({
               ...resizingEvent,
-              endAt: newEndAt
+              endAt
             });
           });
         }
@@ -67,9 +74,17 @@ const useCalendarDayResize = () => {
 
       const handleStopResize = () => {
         const resizingEvent = calendar.getResizingEvent();
-        if (!resizingEvent) return;
+
+        if (!resizingEvent) {
+          return;
+        }
+
         const originalEvent = calendar.getEvent(resizingEvent.id);
-        if (!originalEvent) return;
+
+        if (!originalEvent) {
+          return;
+        }
+
         if (
           resizingEvent.startAt.getTime() === originalEvent.startAt.getTime() &&
           resizingEvent.endAt.getTime() === originalEvent.endAt.getTime()
@@ -95,4 +110,4 @@ const useCalendarDayResize = () => {
   return containerRef;
 };
 
-export { useCalendarDayResize };
+export { useCalendarMonthResize };

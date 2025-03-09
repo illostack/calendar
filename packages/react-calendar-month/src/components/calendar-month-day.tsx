@@ -9,6 +9,7 @@ import {
 import { Button, cn } from "@illostack/react-calendar-ui";
 import * as React from "react";
 
+import { CalendarMonthActiveResize } from "./calendar-month-active-resize";
 import { CalendarMonthActiveSection } from "./calendar-month-active-section";
 import { CalendarMonthActiveSelection } from "./calendar-month-active-selection";
 import { CalendarMonthDndIndicator } from "./calendar-month-dnd-indicator";
@@ -33,7 +34,7 @@ const CalendarMonthViewEventsPanel =
             key={event.id}
             event={event}
             date={date}
-            disabledResize
+            resizeOrientation="horizontal"
           >
             <CalendarMonthEventCardContent event={event} />
           </CalendarEventCard>
@@ -75,7 +76,7 @@ const CalendarMonthDayButton = React.memo<CalendarMonthDayButtonProps>(
           date
         )}`}
         variant={isCurrentDay ? "default" : "ghost"}
-        className="ccalendartalize pointer-events-auto relative z-[1] h-5 rounded-sm px-2 text-xs"
+        className="pointer-events-auto relative z-[1] h-7 w-7 rounded-sm px-2 text-xs capitalize"
         aria-label={`Go to ${formatters.weekDayName(date)} ${formatters.weekDay(
           date
         )}`}
@@ -99,23 +100,24 @@ const CalendarMonthDay: React.FC<CalendarMonthDayProps> = React.memo(
     return (
       <div
         className={cn(
-          "pointer-events-none relative flex flex-col gap-1 overflow-hidden p-1",
+          "pointer-events-none relative flex flex-col gap-1",
           index % 7 === 0 ? "border-l-0" : "border-l",
           index < 7 ? "border-t-0" : "border-t",
           isOutside ? "text-muted-foreground bg-muted/40" : "text-foreground"
         )}
       >
-        <div className="relative flex flex-none justify-center">
+        <div className="relative flex flex-none justify-center px-1 pt-1">
           <CalendarMonthDayButton date={date} />
         </div>
-        <div className="flex-grow overflow-hidden">
-          <div className="relative grid h-full w-full grid-rows-4 gap-px">
+        <div className="flex-grow">
+          <div className="relative grid h-full w-full grid-rows-4 gap-y-px">
+            <CalendarMonthActiveResize date={date} />
             <CalendarMonthViewEventsPanel date={date} />
           </div>
         </div>
+        <CalendarMonthActiveSection date={date} />
         <CalendarMonthActiveSelection date={date} />
         <CalendarMonthDndIndicator date={date} />
-        <CalendarMonthActiveSection date={date} />
       </div>
     );
   }

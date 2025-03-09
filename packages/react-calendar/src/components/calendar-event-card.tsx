@@ -17,18 +17,24 @@ import {
 
 interface CalendarEventCardResizeHandleProps {
   event: CalendarEvent;
+  orientation?: "vertical" | "horizontal";
 }
 
 const CalendarEventCardResizeHandle: React.FC<
   CalendarEventCardResizeHandleProps
-> = ({ event }) => {
+> = ({ event, orientation }) => {
   const calendar = useCalendar();
 
   return (
     <React.Fragment>
       <div
         data-resize-handler="top"
-        className="hover:bg-primary/10 absolute inset-x-2 top-0 h-1 cursor-n-resize rounded-full"
+        className={cn(
+          "hover:bg-primary/10 absolute rounded-full",
+          orientation === "horizontal" &&
+            "inset-y-2 left-0 w-1 cursor-w-resize",
+          orientation === "vertical" && "inset-x-2 top-0 h-1 cursor-n-resize"
+        )}
         onMouseDown={(e) => {
           if (e.button !== 0) {
             return;
@@ -39,7 +45,12 @@ const CalendarEventCardResizeHandle: React.FC<
       />
       <div
         data-resize-handler="bottom"
-        className="hover:bg-primary/10 absolute inset-x-2 bottom-0 h-1 cursor-s-resize rounded-full"
+        className={cn(
+          "hover:bg-primary/10 absolute rounded-full",
+          orientation === "horizontal" &&
+            "inset-y-2 right-0 w-1 cursor-e-resize",
+          orientation === "vertical" && "inset-x-2 bottom-0 h-1 cursor-s-resize"
+        )}
         onMouseDown={(e) => {
           if (e.button !== 0) {
             return;
@@ -57,6 +68,7 @@ interface CalendarEventCardProps extends React.HTMLAttributes<HTMLDivElement> {
   event: CalendarEvent & Partial<CalendarEventWithPosition>;
   disabledDrag?: boolean;
   disabledResize?: boolean;
+  resizeOrientation?: "vertical" | "horizontal";
 }
 
 const CalendarEventCard = React.forwardRef<
@@ -71,6 +83,7 @@ const CalendarEventCard = React.forwardRef<
       className,
       disabledDrag,
       disabledResize,
+      resizeOrientation = "vertical",
       ...props
     },
     ref
@@ -118,7 +131,12 @@ const CalendarEventCard = React.forwardRef<
               } as React.HTMLAttributes<HTMLDivElement>)
             : child
         )}
-        {!disabledResize && <CalendarEventCardResizeHandle event={event} />}
+        {!disabledResize && (
+          <CalendarEventCardResizeHandle
+            event={event}
+            orientation={resizeOrientation}
+          />
+        )}
       </div>
     );
   }

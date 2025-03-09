@@ -1,23 +1,26 @@
 "use client";
 
-import { useCalendar } from "@illostack/react-calendar";
+import { isSameDay, useCalendar, ViewDate } from "@illostack/react-calendar";
 import { cn } from "@illostack/react-calendar-ui";
 import React from "react";
 
 interface CalendarDayAxisProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string;
+  dates: ViewDate[];
 }
 
 const CalendarDayAxis = React.forwardRef<HTMLDivElement, CalendarDayAxisProps>(
-  ({ className, ...props }, ref) => {
+  ({ dates, className, ...props }, ref) => {
     const calendar = useCalendar();
-    const formatters = calendar.getFormatters();
     const { hours } = calendar.getLayout();
+    const formatters = calendar.getFormatters();
 
     return (
       <div
         ref={ref}
-        className={cn("absolute inset-0 -top-px grid grid-cols-1", className)}
+        className={cn(
+          "absolute inset-0 -top-px grid grid-cols-1 rounded-xl",
+          className
+        )}
         style={{ gridTemplateRows: `repeat(${hours.length}, 1fr)` }}
         {...props}
       >
@@ -30,8 +33,25 @@ const CalendarDayAxis = React.forwardRef<HTMLDivElement, CalendarDayAxisProps>(
                 </h3>
               </div>
             </div>
-            <div className="border-muted w-4 flex-none border-r border-t" />
-            <div className="border-muted flex-grow border-r border-t"></div>
+            <div className="border-border/50 w-4 flex-none border-t" />
+            <div className="border-border/50 grid flex-grow border-t">
+              <div
+                className="grid h-full w-full"
+                style={{
+                  gridTemplateColumns: `repeat(${dates.length}, 1fr)`
+                }}
+              >
+                {dates.map(({ date }, index) => (
+                  <div
+                    key={index}
+                    className={cn(
+                      "border-border/50 h-full border-l",
+                      isSameDay(date, new Date()) && "bg-muted/20"
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         ))}
       </div>

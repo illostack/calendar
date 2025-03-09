@@ -2,7 +2,7 @@
 
 import {
   CalendarEvent,
-  isDateBetween,
+  isDatesBetween,
   useCalendar
 } from "@illostack/react-calendar";
 import * as React from "react";
@@ -16,11 +16,19 @@ const CalendarMonthDndIndicatorContent =
   React.memo<CalendarMonthDndIndicatorContentProps>(
     ({ draggingEvent, date }) => {
       const isSameDate = React.useMemo(
-        () => isDateBetween(date, draggingEvent.startAt, draggingEvent.endAt),
+        () =>
+          isDatesBetween(
+            new Date(date.setHours(0, 0, 0, 0)),
+            new Date(date.setHours(23, 59, 59, 999)),
+            draggingEvent.startAt,
+            draggingEvent.endAt
+          ),
         [date, draggingEvent]
       );
 
-      if (!isSameDate) return null;
+      if (!isSameDate) {
+        return null;
+      }
 
       return (
         <div
