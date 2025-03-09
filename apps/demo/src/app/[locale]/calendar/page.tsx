@@ -197,14 +197,14 @@ export default function Page({
         },
         message: {
           "event-created": t("message.event-created"),
-          "event-updated": t("message.event-created"),
-          "event-deleted": t("message.event-created"),
-          "event-restored": t("message.event-created"),
-          "event-duplicated": t("message.event-created"),
-          "event-copied": t("message.event-created"),
-          "event-cutted": t("message.event-created"),
-          "event-pasted": t("message.event-created"),
-          "event-not-found": t("message.event-created")
+          "event-updated": t("message.event-updated"),
+          "event-deleted": t("message.event-deleted"),
+          "event-restored": t("message.event-restored"),
+          "event-duplicated": t("message.event-duplicated"),
+          "event-copied": t("message.event-copied"),
+          "event-cutted": t("message.event-cutted"),
+          "event-pasted": t("message.event-pasted"),
+          "event-not-found": t("message.event-not-found")
         }
       }}
       toasterTheme={theme as "light" | "dark" | "system"}
