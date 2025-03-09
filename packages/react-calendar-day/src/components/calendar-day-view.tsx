@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  CalendarContextMenu,
   CalendarTimeIndicator,
   CalendarView,
   addDays,
@@ -15,6 +14,7 @@ import { useCalendarDayResize } from "../hooks/use-calendar-day-resize";
 import { useCalendarDaySelection } from "../hooks/use-calendar-day-selection";
 import { CalendarDayAxis } from "./calendar-day-axis";
 import { CalendarDayContent } from "./calendar-day-content";
+import { CalendarDayContextMenu } from "./calendar-day-context-menu";
 import { CalendarDayDndProvider } from "./calendar-day-dnd";
 import { CalendarDayDndOverlay } from "./calendar-day-dnd-overlay";
 import { CalendarDayHeader } from "./calendar-day-header";
@@ -33,31 +33,37 @@ const CalendarDaysViewTemplate = React.forwardRef<
   const resizeRef = useCalendarDayResize();
   const interactionRef = useCalendarDayInteraction();
 
-  const { calendarHeight } = calendar.getLayout();
-
   return (
     <div ref={ref} {...props}>
-      <CalendarDayHeader />
+      <CalendarDayHeader dates={dates} />
       <div
-        className="relative h-full select-none pl-20"
         style={{
-          height: calendarHeight
+          height: calendar.getLayout().calendarHeight,
+          width: "100%",
+          position: "relative",
+          userSelect: "none",
+          paddingLeft: "5rem"
         }}
       >
-        <CalendarDayAxis />
+        <CalendarDayAxis dates={dates} />
         <CalendarTimeIndicator />
         <CalendarDayDndProvider>
-          <CalendarContextMenu>
+          <CalendarDayContextMenu>
             <div
               ref={mergeRefs(selectionRef, resizeRef, interactionRef)}
-              className="relative grid h-full w-full"
-              style={{ gridTemplateColumns: `repeat(${dates.length}, 1fr)` }}
+              style={{
+                height: "100%",
+                width: "100%",
+                position: "relative",
+                display: "grid",
+                gridTemplateColumns: `repeat(${dates.length}, 1fr)`
+              }}
             >
               {dates.map(({ date }, index) => (
                 <CalendarDayContent key={index} date={date} />
               ))}
             </div>
-          </CalendarContextMenu>
+          </CalendarDayContextMenu>
           <CalendarDayDndOverlay />
         </CalendarDayDndProvider>
       </div>

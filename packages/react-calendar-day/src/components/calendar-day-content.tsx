@@ -6,7 +6,7 @@ import {
   useViewEvents
 } from "@illostack/react-calendar";
 import { cn } from "@illostack/react-calendar-ui";
-import React from "react";
+import * as React from "react";
 
 import { CalendarDayActiveResize } from "./calendar-day-active-resize";
 import { CalendarDayActiveSection } from "./calendar-day-active-section";

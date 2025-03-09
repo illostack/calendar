@@ -1,19 +1,17 @@
 "use client";
 
-import { useCalendar } from "@illostack/react-calendar";
+import { isSameDay, useCalendar, ViewDate } from "@illostack/react-calendar";
 import { cn } from "@illostack/react-calendar-ui";
 import React from "react";
 
 interface CalendarDayAxisProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string;
+  dates: ViewDate[];
 }
 
 const CalendarDayAxis = React.forwardRef<HTMLDivElement, CalendarDayAxisProps>(
-  ({ className, ...props }, ref) => {
+  ({ dates, className, ...props }, ref) => {
     const calendar = useCalendar();
-    const dates = calendar.useWatch((s) => s.dates);
     const { hours } = calendar.getLayout();
-
     const formatters = calendar.getFormatters();
 
     return (
@@ -35,16 +33,22 @@ const CalendarDayAxis = React.forwardRef<HTMLDivElement, CalendarDayAxisProps>(
                 </h3>
               </div>
             </div>
-            <div className="border-border/50 w-4 flex-none border-r border-t" />
-            <div className="border-border/50 grid flex-grow border-r border-t">
+            <div className="border-border/50 w-4 flex-none border-t" />
+            <div className="border-border/50 grid flex-grow border-t">
               <div
-                className="divide-border/50 grid h-full w-full divide-x"
+                className="grid h-full w-full"
                 style={{
                   gridTemplateColumns: `repeat(${dates.length}, 1fr)`
                 }}
               >
-                {dates.map((_, index) => (
-                  <div key={index} className="h-full" />
+                {dates.map(({ date }, index) => (
+                  <div
+                    key={index}
+                    className={cn(
+                      "border-border/50 h-full border-l",
+                      isSameDay(date, new Date()) && "bg-muted/20"
+                    )}
+                  />
                 ))}
               </div>
             </div>
