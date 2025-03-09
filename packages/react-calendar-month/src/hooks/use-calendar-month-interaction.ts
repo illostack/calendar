@@ -1,6 +1,6 @@
 "use client";
 
-import { addMinutes, useCalendar } from "@illostack/react-calendar";
+import { addDays, useCalendar } from "@illostack/react-calendar";
 import * as React from "react";
 
 import { computeEventTimeRangeFromPointer } from "../lib/utils";
@@ -30,8 +30,7 @@ const useCalendarMonthInteraction = () => {
     }
 
     const startAt = activeSection.startAt;
-    const defaultDuration = calendar.getDefaultEventDuration();
-    const endAt = addMinutes(startAt, defaultDuration);
+    const endAt = addDays(startAt, 1);
 
     calendar.openCreationForm({ startAt, endAt }, () => {
       calendar.clearActiveSection();
