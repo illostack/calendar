@@ -1,6 +1,11 @@
+"use client";
+
+import * as React from "react";
+
 import { useCalendar } from "@illostack/react-calendar";
 import { useIsMutating } from "@tanstack/react-query";
 import {
+  CalendarIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -8,7 +13,6 @@ import {
   Search
 } from "lucide-react";
 import { parseAsNumberLiteral, useQueryState } from "nuqs";
-import { useEffect, useMemo } from "react";
 
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { ThemeSwitcher } from "@/components/theme-switcher";
@@ -29,6 +33,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
+import useSwipe from "@/hooks/use-swipe";
 import { cn } from "@/lib/utils";
 
 type AppHeaderProps = React.HTMLAttributes<HTMLDivElement>;
@@ -61,10 +66,11 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
   const date = calendar.useWatch((state) => state.date);
   const dates = calendar.useWatch((state) => state.dates);
 
-  const title = useMemo(() => {
+  const title = React.useMemo(() => {
     const formatters = calendar.getFormatters();
+
     if (isMobile) {
-      return formatters.date(date);
+      return formatters.month(date);
     }
 
     return {
@@ -79,7 +85,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
     }[view];
   }, [calendar, date, isMobile, view, dates]);
 
-  useEffect(() => {
+  React.useEffect(() => {
+    if (isMobile) {
+      return;
+    }
     const shortCuts = [
       {
         key: "ArrowLeft",
@@ -131,7 +140,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [calendar, setDays]);
+  }, [calendar, isMobile, setDays]);
+
+  useSwipe(calendar.increaseDate, calendar.decreaseDate, 50);
 
   const translations = calendar.getTranslations();
 
@@ -143,7 +154,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
       )}
       {...props}
     >
-      <SidebarTrigger className="-ml-1 h-9 w-9 rounded-full" />
+      <SidebarTrigger className="-ml-1 h-9 w-9 flex-none rounded-full" />
       <Separator orientation="vertical" className="mr-2 h-4" />
       {!isMobile && (
         <div className="flex items-center gap-2">
@@ -174,7 +185,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
           </div>
         </div>
       )}
-      <h1 className="first-letter:ccalendartalize text-lg font-semibold">
+      <h1 className="first-letter:ccalendartalize select-none text-lg font-semibold">
         {title}
       </h1>
       {!!isLoading && (
@@ -254,7 +265,19 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
           </Button> */}
         </div>
       )}
-      <div className="ml-auto flex items-center gap-2 sm:ml-0">
+      {isMobile && (
+        <div className="ml-auto flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={translations.literals.today}
+            onClick={calendar.goToday}
+          >
+            <CalendarIcon />
+          </Button>
+        </div>
+      )}
+      <div className="flex items-center gap-2">
         <ThemeSwitcher />
         <LocaleSwitcher />
       </div>
