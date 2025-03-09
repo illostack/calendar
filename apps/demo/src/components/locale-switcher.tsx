@@ -50,7 +50,7 @@ const LocaleSwitcher = React.forwardRef<HTMLButtonElement, LocaleSwitcherProps>(
           ref={ref}
           aria-label="Select language"
           className={cn(
-            "flex w-9 items-center justify-center p-0 [&_svg]:hidden",
+            "flex w-9 items-center justify-center border-transparent p-0 shadow-none [&_svg]:hidden",
             className
           )}
           {...props}

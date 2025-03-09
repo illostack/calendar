@@ -36,7 +36,7 @@ const CalendarDayView = React.forwardRef<HTMLDivElement, CalendarDayViewProps>(
       <div ref={ref} {...props}>
         <CalendarDayHeader />
         <div
-          className="relative h-full w-full pl-24"
+          className="relative h-full w-full pl-20"
           style={{
             height: calendarHeight
           }}

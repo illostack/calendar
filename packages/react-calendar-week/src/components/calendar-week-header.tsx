@@ -20,34 +20,30 @@ const CalendarWeekHeader = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "bg-background sticky top-16 z-10 grid h-12 w-full flex-none grid-cols-7 items-center border-b pl-24",
+        "bg-background sticky top-16 z-10 grid h-12 w-full flex-none grid-cols-7 items-center border-b pl-20",
         className
       )}
       {...props}
     >
-      {dates.map(({ date }, index) => {
-        const isCurrentDay = isSameDay(date, new Date());
-        const buttonVariant = isCurrentDay ? "default" : "ghost";
-        const ariaLabel = `Go to ${formatters.weekDayName(
-          date
-        )} ${formatters.weekDay(date)}`;
-        return (
-          <div key={index} className="flex justify-center">
-            <h3>
-              <Button
-                type="button"
-                size="sm"
-                variant={buttonVariant}
-                className="ccalendartalize rounded-full font-semibold"
-                aria-label={ariaLabel}
-                onClick={() => calendar.changeDate(date, "day")}
-              >
-                {formatters.weekDayName(date)} {formatters.weekDay(date)}
-              </Button>
-            </h3>
-          </div>
-        );
-      })}
+      {dates.map(({ date }, index) => (
+        <div key={index} className="flex justify-center">
+          <h3>
+            <Button
+              type="button"
+              size="sm"
+              variant={isSameDay(date, new Date()) ? "secondary" : "ghost"}
+              className="h-9 w-9 flex-col gap-0 -space-y-1 rounded-full text-xs font-semibold capitalize md:h-9 md:w-auto md:flex-row md:gap-1 md:space-y-0"
+              aria-label={`Go to ${formatters.weekDayName(
+                date
+              )} ${formatters.weekDay(date)}`}
+              onClick={() => calendar.changeDate(date, "day")}
+            >
+              <span>{formatters.weekDayName(date)}</span>
+              <span>{formatters.weekDay(date)}</span>
+            </Button>
+          </h3>
+        </div>
+      ))}
     </div>
   );
 });

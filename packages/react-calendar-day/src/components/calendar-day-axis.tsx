@@ -23,7 +23,7 @@ const CalendarDayAxis = React.forwardRef<HTMLDivElement, CalendarDayAxisProps>(
       >
         {hours.map((hour) => (
           <div key={hour} className="group flex">
-            <div className="relative mt-px w-20 flex-none">
+            <div className="relative mt-px w-16 flex-none">
               <div className="absolute left-0 top-0 w-full -translate-y-1/2 text-center group-first:hidden">
                 <h3 className="whitespace-nowrap text-xs font-semibold">
                   {formatters.time(new Date(0, 0, 0, hour, 0))}
