@@ -5,7 +5,7 @@ import * as React from "react";
 
 import { computeEventTimeRangeFromPointer } from "../lib/utils";
 
-const useCalendarMonthActivator = () => {
+const useCalendarMonthInteraction = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const calendar = useCalendar();
 
@@ -206,4 +206,4 @@ const useCalendarMonthActivator = () => {
   return containerRef;
 };
 
-export { useCalendarMonthActivator };
+export { useCalendarMonthInteraction };
