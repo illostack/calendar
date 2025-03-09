@@ -6,7 +6,7 @@ export * from "./components/calendar-day-dnd-overlay";
 export * from "./components/calendar-day-header";
 export * from "./components/calendar-day-view";
 
-export * from "./hooks/use-calendar-day-activator";
+export * from "./hooks/use-calendar-day-interaction";
 export * from "./hooks/use-calendar-day-resize";
 export * from "./hooks/use-calendar-day-selection";
 

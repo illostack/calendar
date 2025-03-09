@@ -14,7 +14,7 @@ import {
 } from "@illostack/react-calendar";
 import * as React from "react";
 
-import { computeDayEventBounds } from "../lib/utils";
+import { computeEventBoundsFromCard } from "../lib/utils";
 
 const CalendarDayDndProvider = React.memo(
   ({ children }: { children: React.ReactNode }) => {
@@ -74,7 +74,7 @@ const CalendarDayDndProvider = React.memo(
 
         const calendarEvent = operation.source?.data as CalendarEvent;
 
-        const { startAt, endAt } = computeDayEventBounds(
+        const { startAt, endAt } = computeEventBoundsFromCard(
           calendarEvent,
           cardRect,
           containerRect,
@@ -100,7 +100,7 @@ const CalendarDayDndProvider = React.memo(
 
         const calendarEvent = operation.source?.data as CalendarEvent;
 
-        const { startAt, endAt } = computeDayEventBounds(
+        const { startAt, endAt } = computeEventBoundsFromCard(
           calendarEvent,
           cardRect,
           containerRect,

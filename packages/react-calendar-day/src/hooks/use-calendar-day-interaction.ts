@@ -1,11 +1,11 @@
 "use client";
 
-import { addMinutes, rowToTime, useCalendar } from "@illostack/react-calendar";
+import { addMinutes, useCalendar } from "@illostack/react-calendar";
 import * as React from "react";
 
-import { getDateFromXPositon } from "../lib/utils";
+import { computeEventTimeRangeFromPointer } from "../lib/utils";
 
-const useCalendarDayActivator = () => {
+const useCalendarDayInteraction = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const calendar = useCalendar();
 
@@ -95,17 +95,16 @@ const useCalendarDayActivator = () => {
       return;
     }
 
-    const handleContainerContextMenu = (e: MouseEvent) => {
-      const eventId = (e.target as HTMLElement).dataset.eventId;
-      // Si el targer contiene data-event-id, entonces no se debe crear un nuevo evento
+    const handleContainerContextMenu = (event: MouseEvent) => {
+      const eventId = (event.target as HTMLElement).dataset.eventId;
+
       if (eventId) {
         calendar.clearActiveSection();
         calendar.activateEvent(eventId);
-
         return;
       }
 
-      if (e.target !== container) {
+      if (event.target !== container) {
         return;
       }
 
@@ -117,36 +116,26 @@ const useCalendarDayActivator = () => {
 
       calendar.clearActiveEvent();
 
-      const rect = containerRef.current?.getBoundingClientRect();
-
-      if (!rect) {
-        return;
-      }
-
-      const { minutesPerRow, totalRows } = calendar.getLayout();
-
-      const y = e.clientY - rect.top;
-      const x = e.clientX - rect.left;
-      const row = Math.floor((y / rect.height) * totalRows);
-      const date = getDateFromXPositon(x, rect.width, calendar);
-      const startAt = rowToTime(date, row, calendar);
-      const endAt = addMinutes(startAt, minutesPerRow);
+      const { startAt, endAt } = computeEventTimeRangeFromPointer(
+        event,
+        container,
+        calendar
+      );
 
       calendar.activateSection({ startAt, endAt });
     };
 
-    const handleContainerClick = (e: MouseEvent) => {
-      const eventId = (e.target as HTMLElement).dataset.eventId;
-      // Si el targer contiene data-event-id, entonces no se debe crear un nuevo evento
+    const handleContainerClick = (event: MouseEvent) => {
+      const eventId = (event.target as HTMLElement).dataset.eventId;
+
       if (eventId) {
-        e.stopPropagation();
+        event.stopPropagation();
         calendar.clearActiveSection();
         calendar.activateEvent(eventId);
-
         return;
       }
 
-      if (e.target !== container) {
+      if (event.target !== container) {
         return;
       }
 
@@ -158,36 +147,27 @@ const useCalendarDayActivator = () => {
 
       calendar.clearActiveEvent();
 
-      const rect = containerRef.current?.getBoundingClientRect();
-
-      if (!rect) {
-        return;
-      }
-
-      const { minutesPerRow, totalRows } = calendar.getLayout();
-
-      const y = e.clientY - rect.top;
-      const x = e.clientX - rect.left;
-      const row = Math.floor((y / rect.height) * totalRows);
-      const date = getDateFromXPositon(x, rect.width, calendar);
-      const startAt = rowToTime(date, row, calendar);
-      const endAt = addMinutes(startAt, minutesPerRow);
+      const { startAt, endAt } = computeEventTimeRangeFromPointer(
+        event,
+        container,
+        calendar
+      );
 
       calendar.activateSection({ startAt, endAt });
     };
 
-    const handleContainerDoubleClick = (e: MouseEvent) => {
-      const eventId = (e.target as HTMLElement).dataset.eventId;
-      // Si el targer contiene data-event-id, entonces no se debe crear un nuevo evento
+    const handleContainerDoubleClick = (event: MouseEvent) => {
+      const eventId = (event.target as HTMLElement).dataset.eventId;
+
       if (eventId) {
-        e.stopPropagation();
+        event.stopPropagation();
         calendar.openUpdateForm(eventId, () => {
           calendar.clearActiveEvent();
         });
         return;
       }
 
-      if (e.target !== container) {
+      if (event.target !== container) {
         return;
       }
 
@@ -199,20 +179,11 @@ const useCalendarDayActivator = () => {
 
       calendar.clearActiveEvent();
 
-      const rect = containerRef.current?.getBoundingClientRect();
-
-      if (!rect) {
-        return;
-      }
-
-      const { minutesPerRow, totalRows } = calendar.getLayout();
-
-      const y = e.clientY - rect.top;
-      const x = e.clientX - rect.left;
-      const row = Math.floor((y / rect.height) * totalRows);
-      const date = getDateFromXPositon(x, rect.width, calendar);
-      const startAt = rowToTime(date, row, calendar);
-      const endAt = addMinutes(startAt, minutesPerRow);
+      const { startAt, endAt } = computeEventTimeRangeFromPointer(
+        event,
+        container,
+        calendar
+      );
 
       calendar.activateSection({ startAt, endAt });
 
@@ -233,4 +204,4 @@ const useCalendarDayActivator = () => {
   return containerRef;
 };
 
-export { useCalendarDayActivator };
+export { useCalendarDayInteraction };

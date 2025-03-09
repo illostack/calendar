@@ -10,7 +10,7 @@ import {
 } from "@illostack/react-calendar";
 import React from "react";
 
-import { useCalendarDayActivator } from "../hooks/use-calendar-day-activator";
+import { useCalendarDayInteraction } from "../hooks/use-calendar-day-interaction";
 import { useCalendarDayResize } from "../hooks/use-calendar-day-resize";
 import { useCalendarDaySelection } from "../hooks/use-calendar-day-selection";
 import { CalendarDayAxis } from "./calendar-day-axis";
@@ -28,9 +28,9 @@ const CalendarDayView = React.forwardRef<HTMLDivElement, CalendarDayViewProps>(
     const calendar = useCalendar();
     const date = calendar.useWatch((s) => s.date);
     const { calendarHeight } = calendar.getLayout();
-    const selectionPanel = useCalendarDaySelection();
-    const resizePanel = useCalendarDayResize();
-    const activePanel = useCalendarDayActivator();
+    const selectionRef = useCalendarDaySelection();
+    const resizeRef = useCalendarDayResize();
+    const interactionRef = useCalendarDayInteraction();
 
     return (
       <div ref={ref} {...props}>
@@ -46,7 +46,7 @@ const CalendarDayView = React.forwardRef<HTMLDivElement, CalendarDayViewProps>(
           <CalendarDayDndProvider>
             <CalendarContextMenu>
               <div
-                ref={mergeRefs(selectionPanel, resizePanel, activePanel)}
+                ref={mergeRefs(selectionRef, resizeRef, interactionRef)}
                 className="relative grid h-full w-full grid-cols-1"
               >
                 <CalendarDayContent date={date} />
