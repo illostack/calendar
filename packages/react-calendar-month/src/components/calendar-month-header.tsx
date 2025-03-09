@@ -23,7 +23,7 @@ const CalendarMonthHeader = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "grid h-9 w-full flex-none grid-cols-7 items-center border-b",
+        "grid h-12 w-full flex-none grid-cols-7 items-center border-b",
         className
       )}
       {...props}
