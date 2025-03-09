@@ -1,0 +1,44 @@
+{
+  "name": "@illostack/react-calendar-ui",
+  "version": "0.0.1",
+  "keywords": [],
+  "description": "React Calendar UI",
+  "author": "illodev",
+  "license": "MIT",
+  "exports": "./src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/illostack/calendar.git",
+    "directory": "packages/react-calendar-ui"
+  },
+  "homepage": "https://github.com/illostack/calendar",
+  "scripts": {
+    "build": "tsc"
+  },
+  "type": "module",
+  "files": [
+    "build",
+    "src"
+  ],
+  "dependencies": {
+    "@illostack/react-store": "workspace:*",
+    "@radix-ui/react-context-menu": "^2.2.6",
+    "@radix-ui/react-dialog": "^1.1.5",
+    "@radix-ui/react-label": "^2.1.1",
+    "@radix-ui/react-radio-group": "^1.2.2",
+    "@radix-ui/react-slot": "^1.1.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.474.0",
+    "react-hook-form": "^7.54.2",
+    "sonner": "^1.7.4",
+    "tailwind-merge": "^2.6.0",
+    "vaul": "^1.1.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "packageManager": "pnpm@9.9.0"
+}

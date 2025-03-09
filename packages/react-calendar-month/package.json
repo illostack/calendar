@@ -1,0 +1,33 @@
+{
+  "name": "@illostack/react-calendar-month",
+  "version": "0.0.1",
+  "keywords": [],
+  "description": "React Calendar Month",
+  "author": "illodev",
+  "license": "MIT",
+  "exports": "./src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/illostack/calendar.git",
+    "directory": "packages/react-calendar-month"
+  },
+  "homepage": "https://github.com/illostack/calendar",
+  "scripts": {
+    "build": "tsc"
+  },
+  "type": "module",
+  "files": [
+    "build",
+    "src"
+  ],
+  "dependencies": {
+    "@illostack/react-calendar-ui": "workspace:*",
+    "@illostack/react-calendar": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "packageManager": "pnpm@9.9.0"
+}

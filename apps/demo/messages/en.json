@@ -1,0 +1,123 @@
+{
+  "Manifest": {
+    "name": "Name"
+  },
+  "calendar": {
+    "days": {
+      "0": {
+        "short": "Sun",
+        "long": "Sunday"
+      },
+      "1": {
+        "short": "Mon",
+        "long": "Monday"
+      },
+      "2": {
+        "short": "Tue",
+        "long": "Tuesday"
+      },
+      "3": {
+        "short": "Wed",
+        "long": "Wednesday"
+      },
+      "4": {
+        "short": "Thu",
+        "long": "Thursday"
+      },
+      "5": {
+        "short": "Fri",
+        "long": "Friday"
+      },
+      "6": {
+        "short": "Sat",
+        "long": "Saturday"
+      }
+    },
+    "months": {
+      "0": {
+        "short": "Jan",
+        "long": "January"
+      },
+      "1": {
+        "short": "Feb",
+        "long": "February"
+      },
+      "2": {
+        "short": "Mar",
+        "long": "March"
+      },
+      "3": {
+        "short": "Apr",
+        "long": "April"
+      },
+      "4": {
+        "short": "May",
+        "long": "May"
+      },
+      "5": {
+        "short": "Jun",
+        "long": "June"
+      },
+      "6": {
+        "short": "Jul",
+        "long": "July"
+      },
+      "7": {
+        "short": "Aug",
+        "long": "August"
+      },
+      "8": {
+        "short": "Sep",
+        "long": "September"
+      },
+      "9": {
+        "short": "Oct",
+        "long": "October"
+      },
+      "10": {
+        "short": "Nov",
+        "long": "November"
+      },
+      "11": {
+        "short": "Dec",
+        "long": "December"
+      }
+    }
+  },
+  "literals": {
+    "day": "Day",
+    "days": "Days",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "range": "Range",
+    "today": "Today",
+    "previous": "Previous",
+    "next": "Next",
+    "more": "More"
+  },
+  "form": {
+    "save": "Save"
+  },
+  "action": {
+    "create-event": "Create event",
+    "update-event": "Update event",
+    "delete-event": "Delete event",
+    "duplicate-event": "Duplicate event",
+    "copy-event": "Copy event",
+    "cut-event": "Cut event",
+    "paste-event": "Paste event",
+    "undo": "Undo"
+  },
+  "message": {
+    "event-created": "Event created",
+    "event-updated": "Event updated",
+    "event-deleted": "Event deleted",
+    "event-restored": "Event restored",
+    "event-duplicated": "Event duplicated",
+    "event-copied": "Event copied",
+    "event-cutted": "Event cutted",
+    "event-pasted": "Event pasted",
+    "event-not-found": "Event not found"
+  }
+}

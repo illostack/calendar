@@ -1,0 +1,123 @@
+{
+  "Manifest": {
+    "name": "Nombre"
+  },
+  "calendar": {
+    "days": {
+      "0": {
+        "short": "Dom",
+        "long": "Domingo"
+      },
+      "1": {
+        "short": "Lun",
+        "long": "Lunes"
+      },
+      "2": {
+        "short": "Mar",
+        "long": "Martes"
+      },
+      "3": {
+        "short": "Mié",
+        "long": "Miércoles"
+      },
+      "4": {
+        "short": "Jue",
+        "long": "Jueves"
+      },
+      "5": {
+        "short": "Vie",
+        "long": "Viernes"
+      },
+      "6": {
+        "short": "Sáb",
+        "long": "Sábado"
+      }
+    },
+    "months": {
+      "0": {
+        "short": "Ene",
+        "long": "Enero"
+      },
+      "1": {
+        "short": "Feb",
+        "long": "Febrero"
+      },
+      "2": {
+        "short": "Mar",
+        "long": "Marzo"
+      },
+      "3": {
+        "short": "Abr",
+        "long": "Abril"
+      },
+      "4": {
+        "short": "May",
+        "long": "Mayo"
+      },
+      "5": {
+        "short": "Jun",
+        "long": "Junio"
+      },
+      "6": {
+        "short": "Jul",
+        "long": "Julio"
+      },
+      "7": {
+        "short": "Ago",
+        "long": "Agosto"
+      },
+      "8": {
+        "short": "Sep",
+        "long": "Septiembre"
+      },
+      "9": {
+        "short": "Oct",
+        "long": "Octubre"
+      },
+      "10": {
+        "short": "Nov",
+        "long": "Noviembre"
+      },
+      "11": {
+        "short": "Dic",
+        "long": "Diciembre"
+      }
+    }
+  },
+  "literals": {
+    "day": "Día",
+    "days": "Días",
+    "week": "Semana",
+    "month": "Mes",
+    "year": "Año",
+    "range": "Rango",
+    "today": "Hoy",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "more": "Más"
+  },
+  "form": {
+    "save": "Guardar"
+  },
+  "action": {
+    "create-event": "Crear evento",
+    "update-event": "Actualizar evento",
+    "delete-event": "Eliminar evento",
+    "duplicate-event": "Duplicar evento",
+    "copy-event": "Copiar evento",
+    "cut-event": "Cortar evento",
+    "paste-event": "Pegar evento",
+    "undo": "Deshacer"
+  },
+  "message": {
+    "event-created": "Evento creado",
+    "event-updated": "Evento actualizado",
+    "event-deleted": "Evento eliminado",
+    "event-restored": "Evento restaurado",
+    "event-duplicated": "Evento duplicado",
+    "event-copied": "Evento copiado",
+    "event-cutted": "Evento cortado",
+    "event-pasted": "Evento pegado",
+    "event-not-found": "Evento no encontrado"
+  }
+}

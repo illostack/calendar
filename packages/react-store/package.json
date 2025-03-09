@@ -1,0 +1,28 @@
+{
+  "name": "@illostack/react-store",
+  "version": "0.0.1",
+  "keywords": [],
+  "description": "React store",
+  "author": "illodev",
+  "license": "MIT",
+  "exports": "./src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/illostack/calendar.git",
+    "directory": "packages/react-store"
+  },
+  "homepage": "https://github.com/illostack/calendar",
+  "scripts": {
+    "build": "tsc"
+  },
+  "type": "module",
+  "files": [
+    "build",
+    "src"
+  ],
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0"
+  },
+  "packageManager": "pnpm@9.9.0"
+}
