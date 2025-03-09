@@ -11,7 +11,7 @@ import {
 import { cn } from "@illostack/react-calendar-ui";
 import * as React from "react";
 
-import { useCalendarMonthActivator } from "../hooks/use-calendar-month-activator";
+import { useCalendarMonthInteraction } from "../hooks/use-calendar-month-interaction";
 import { useCalendarMonthSelection } from "../hooks/use-calendar-month-selection";
 import { CalendarMonthDay } from "./calendar-month-day";
 import { CalendarMonthDndProvider } from "./calendar-month-dnd";
@@ -28,8 +28,8 @@ const CalendarMonthView = React.forwardRef<
 >(({ className, ...props }, ref) => {
   const calendar = useCalendar();
   const dates = calendar.useWatch((s) => s.dates);
-  const selectionPanel = useCalendarMonthSelection();
-  const activePanel = useCalendarMonthActivator();
+  const selectionRef = useCalendarMonthSelection();
+  const interactionRef = useCalendarMonthInteraction();
 
   return (
     <div
@@ -42,7 +42,7 @@ const CalendarMonthView = React.forwardRef<
         <CalendarMonthDndProvider>
           <CalendarContextMenu>
             <div
-              ref={mergeRefs(selectionPanel, activePanel)}
+              ref={mergeRefs(selectionRef, interactionRef)}
               className="grid h-full w-full"
               style={{
                 gridTemplateColumns: `repeat(7, 1fr)`,
