@@ -8,16 +8,18 @@ import {
   CalendarViewMeta
 } from "@illostack/react-calendar";
 
-const getDateFromPointerPosition = (
-  pointerX: number,
-  pointerY: number,
-  containerBounds: DOMRect,
+const computeEventTimeRangeFromPointer = (
+  e: MouseEvent,
+  container: HTMLDivElement,
   calendar: CalendarApi<
     CalendarProvidedEvent,
     CalendarView<CalendarViewId, CalendarViewMeta, CalendarViewConfiguration>[]
   >
 ) => {
-  const { width, height } = containerBounds;
+  const { clientX, clientY } = e;
+  const { width, height, top, left } = container.getBoundingClientRect();
+  const pointerY = clientY - top;
+  const pointerX = clientX - left;
 
   const dates = calendar.getDates();
   const monthRows = Math.floor(dates.length / 7);
@@ -28,14 +30,14 @@ const getDateFromPointerPosition = (
 
   const date = dates.at(row * monthCols + col)?.date as Date;
 
-  const startAtDate = new Date(
+  const startAt = new Date(
     date.getFullYear(),
     date.getMonth(),
     date.getDate(),
     0,
     0
   );
-  const endAtDate = new Date(
+  const endAt = new Date(
     date.getFullYear(),
     date.getMonth(),
     date.getDate(),
@@ -43,10 +45,10 @@ const getDateFromPointerPosition = (
     59
   );
 
-  return { startAt: startAtDate, endAt: endAtDate };
+  return { startAt, endAt };
 };
 
-const computeMonthEventBounds = (
+const computeEventBoundsFromCard = (
   event: CalendarEvent,
   cardBounds: DOMRect,
   containerBounds: DOMRect,
@@ -93,4 +95,4 @@ const computeMonthEventBounds = (
   return { startAt: startAtDate, endAt: endAtDate };
 };
 
-export { computeMonthEventBounds, getDateFromPointerPosition };
+export { computeEventBoundsFromCard, computeEventTimeRangeFromPointer };

@@ -3,7 +3,7 @@
 import { addMinutes, useCalendar } from "@illostack/react-calendar";
 import * as React from "react";
 
-import { getDateFromPointerPosition } from "../lib/utils";
+import { computeEventTimeRangeFromPointer } from "../lib/utils";
 
 const useCalendarMonthActivator = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -95,9 +95,9 @@ const useCalendarMonthActivator = () => {
       return;
     }
 
-    const handleContainerContextMenu = (e: MouseEvent) => {
-      const eventId = (e.target as HTMLElement).dataset.eventId;
-      // Si el targer contiene data-event-id, entonces no se debe crear un nuevo evento
+    const handleContainerContextMenu = (event: MouseEvent) => {
+      const eventId = (event.target as HTMLElement).dataset.eventId;
+
       if (eventId) {
         calendar.clearActiveSection();
         calendar.activateEvent(eventId);
@@ -105,7 +105,7 @@ const useCalendarMonthActivator = () => {
         return;
       }
 
-      if (e.target !== container) {
+      if (event.target !== container) {
         return;
       }
 
@@ -117,37 +117,27 @@ const useCalendarMonthActivator = () => {
 
       calendar.clearActiveEvent();
 
-      const rect = containerRef.current?.getBoundingClientRect();
-
-      if (!rect) {
-        return;
-      }
-
-      const y = e.clientY - rect.top;
-      const x = e.clientX - rect.left;
-
-      const { startAt, endAt } = getDateFromPointerPosition(
-        x,
-        y,
-        rect,
+      const { startAt, endAt } = computeEventTimeRangeFromPointer(
+        event,
+        container,
         calendar
       );
 
       calendar.activateSection({ startAt, endAt });
     };
 
-    const handleContainerClick = (e: MouseEvent) => {
-      const eventId = (e.target as HTMLElement).dataset.eventId;
-      // Si el targer contiene data-event-id, entonces no se debe crear un nuevo evento
+    const handleContainerClick = (event: MouseEvent) => {
+      const eventId = (event.target as HTMLElement).dataset.eventId;
+
       if (eventId) {
-        e.stopPropagation();
+        event.stopPropagation();
         calendar.clearActiveSection();
         calendar.activateEvent(eventId);
 
         return;
       }
 
-      if (e.target !== container) {
+      if (event.target !== container) {
         return;
       }
 
@@ -159,37 +149,27 @@ const useCalendarMonthActivator = () => {
 
       calendar.clearActiveEvent();
 
-      const rect = containerRef.current?.getBoundingClientRect();
-
-      if (!rect) {
-        return;
-      }
-
-      const y = e.clientY - rect.top;
-      const x = e.clientX - rect.left;
-
-      const { startAt, endAt } = getDateFromPointerPosition(
-        x,
-        y,
-        rect,
+      const { startAt, endAt } = computeEventTimeRangeFromPointer(
+        event,
+        container,
         calendar
       );
 
       calendar.activateSection({ startAt, endAt });
     };
 
-    const handleContainerDoubleClick = (e: MouseEvent) => {
-      const eventId = (e.target as HTMLElement).dataset.eventId;
-      // Si el targer contiene data-event-id, entonces no se debe crear un nuevo evento
+    const handleContainerDoubleClick = (event: MouseEvent) => {
+      const eventId = (event.target as HTMLElement).dataset.eventId;
+
       if (eventId) {
-        e.stopPropagation();
+        event.stopPropagation();
         calendar.openUpdateForm(eventId, () => {
           calendar.clearActiveEvent();
         });
         return;
       }
 
-      if (e.target !== container) {
+      if (event.target !== container) {
         return;
       }
 
@@ -201,19 +181,9 @@ const useCalendarMonthActivator = () => {
 
       calendar.clearActiveEvent();
 
-      const rect = containerRef.current?.getBoundingClientRect();
-
-      if (!rect) {
-        return;
-      }
-
-      const y = e.clientY - rect.top;
-      const x = e.clientX - rect.left;
-
-      const { startAt, endAt } = getDateFromPointerPosition(
-        x,
-        y,
-        rect,
+      const { startAt, endAt } = computeEventTimeRangeFromPointer(
+        event,
+        container,
         calendar
       );
 
