@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  CalendarContextMenu,
   CalendarView,
   addMonths,
   getMonthDays,
@@ -12,7 +11,9 @@ import { cn } from "@illostack/react-calendar-ui";
 import * as React from "react";
 
 import { useCalendarMonthInteraction } from "../hooks/use-calendar-month-interaction";
+import { useCalendarMonthResize } from "../hooks/use-calendar-month-resize";
 import { useCalendarMonthSelection } from "../hooks/use-calendar-month-selection";
+import { CalendarMonthContextMenu } from "./calendar-month-context-menu";
 import { CalendarMonthDay } from "./calendar-month-day";
 import { CalendarMonthDndProvider } from "./calendar-month-dnd";
 import { CalendarMonthDndOverlay } from "./calendar-month-dnd-overlay";
@@ -29,6 +30,7 @@ const CalendarMonthView = React.forwardRef<
   const calendar = useCalendar();
   const dates = calendar.useWatch((s) => s.dates);
   const selectionRef = useCalendarMonthSelection();
+  const resizeRef = useCalendarMonthResize();
   const interactionRef = useCalendarMonthInteraction();
 
   return (
@@ -40,11 +42,13 @@ const CalendarMonthView = React.forwardRef<
       <CalendarMonthHeader />
       <div className="relative flex h-0 flex-grow select-none flex-col">
         <CalendarMonthDndProvider>
-          <CalendarContextMenu>
+          <CalendarMonthContextMenu>
             <div
-              ref={mergeRefs(selectionRef, interactionRef)}
-              className="grid h-full w-full"
+              ref={mergeRefs(selectionRef, resizeRef, interactionRef)}
               style={{
+                height: "100%",
+                width: "100%",
+                display: "grid",
                 gridTemplateColumns: `repeat(7, 1fr)`,
                 gridTemplateRows: `repeat(${dates.length / 7}, 1fr)`
               }}
@@ -60,7 +64,7 @@ const CalendarMonthView = React.forwardRef<
                 );
               })}
             </div>
-          </CalendarContextMenu>
+          </CalendarMonthContextMenu>
           <CalendarMonthDndOverlay />
         </CalendarMonthDndProvider>
       </div>

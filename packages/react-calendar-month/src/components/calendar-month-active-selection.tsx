@@ -21,7 +21,9 @@ const CalendarMonthActiveSelectionContent =
         [date, selection]
       );
 
-      if (!isSameDate) return null;
+      if (!isSameDate) {
+        return null;
+      }
 
       return (
         <div
