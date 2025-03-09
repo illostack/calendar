@@ -40,7 +40,7 @@ const CalendarWeekView = React.forwardRef<
     <div ref={ref} {...props}>
       <CalendarWeekHeader />
       <div
-        className="relative h-full pl-24"
+        className="relative h-full pl-20"
         style={{
           height: calendar.getLayout().calendarHeight
         }}

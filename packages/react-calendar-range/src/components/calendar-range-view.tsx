@@ -42,7 +42,7 @@ const CalendarRangeView = React.forwardRef<
     <div ref={ref} {...props}>
       <CalendarRangeHeader />
       <div
-        className="relative h-full select-none pl-24"
+        className="relative h-full select-none pl-20"
         style={{
           height: calendarHeight
         }}
