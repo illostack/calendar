@@ -23,43 +23,48 @@ interface CalendarDayViewProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
 }
 
-const CalendarDayView = React.forwardRef<HTMLDivElement, CalendarDayViewProps>(
-  (props, ref) => {
-    const calendar = useCalendar();
-    const date = calendar.useWatch((s) => s.date);
-    const { calendarHeight } = calendar.getLayout();
-    const selectionRef = useCalendarDaySelection();
-    const resizeRef = useCalendarDayResize();
-    const interactionRef = useCalendarDayInteraction();
+const CalendarDaysViewTemplate = React.forwardRef<
+  HTMLDivElement,
+  CalendarDayViewProps
+>((props, ref) => {
+  const calendar = useCalendar();
+  const dates = calendar.useWatch((s) => s.dates);
+  const selectionRef = useCalendarDaySelection();
+  const resizeRef = useCalendarDayResize();
+  const interactionRef = useCalendarDayInteraction();
 
-    return (
-      <div ref={ref} {...props}>
-        <CalendarDayHeader />
-        <div
-          className="relative h-full w-full pl-20"
-          style={{
-            height: calendarHeight
-          }}
-        >
-          <CalendarDayAxis />
-          <CalendarTimeIndicator />
-          <CalendarDayDndProvider>
-            <CalendarContextMenu>
-              <div
-                ref={mergeRefs(selectionRef, resizeRef, interactionRef)}
-                className="relative grid h-full w-full grid-cols-1"
-              >
-                <CalendarDayContent date={date} />
-              </div>
-            </CalendarContextMenu>
-            <CalendarDayDndOverlay />
-          </CalendarDayDndProvider>
-        </div>
+  const { calendarHeight } = calendar.getLayout();
+
+  return (
+    <div ref={ref} {...props}>
+      <CalendarDayHeader />
+      <div
+        className="relative h-full select-none pl-20"
+        style={{
+          height: calendarHeight
+        }}
+      >
+        <CalendarDayAxis />
+        <CalendarTimeIndicator />
+        <CalendarDayDndProvider>
+          <CalendarContextMenu>
+            <div
+              ref={mergeRefs(selectionRef, resizeRef, interactionRef)}
+              className="relative grid h-full w-full"
+              style={{ gridTemplateColumns: `repeat(${dates.length}, 1fr)` }}
+            >
+              {dates.map(({ date }, index) => (
+                <CalendarDayContent key={index} date={date} />
+              ))}
+            </div>
+          </CalendarContextMenu>
+          <CalendarDayDndOverlay />
+        </CalendarDayDndProvider>
       </div>
-    );
-  }
-);
-CalendarDayView.displayName = "CalendarDayView";
+    </div>
+  );
+});
+CalendarDaysViewTemplate.displayName = "CalendarDaysViewTemplate";
 
 const VIEW_ID = "day";
 type CalendarDayMeta = Record<string, unknown>;
@@ -71,7 +76,7 @@ const view: CalendarView<
   CalendarDayConfiguration
 > = {
   id: VIEW_ID,
-  content: CalendarDayView,
+  content: CalendarDaysViewTemplate,
   viewDatesFn(date) {
     return [{ date: date, isOutside: false }];
   },
@@ -87,4 +92,4 @@ const view: CalendarView<
   }
 };
 
-export { view as CalendarDayView };
+export { view as CalendarDayView, CalendarDaysViewTemplate };
