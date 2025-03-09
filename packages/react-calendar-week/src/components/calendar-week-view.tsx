@@ -13,7 +13,7 @@ import {
   CalendarDayContent,
   CalendarDayDndOverlay,
   CalendarDayDndProvider,
-  useCalendarDayActivator,
+  useCalendarDayInteraction,
   useCalendarDayResize,
   useCalendarDaySelection
 } from "@illostack/react-calendar-day";
@@ -32,9 +32,9 @@ const CalendarWeekView = React.forwardRef<
 >((props, ref) => {
   const calendar = useCalendar();
   const dates = calendar.useWatch((s) => s.dates);
-  const selectionPanel = useCalendarDaySelection();
-  const resizePanel = useCalendarDayResize();
-  const sectionPanel = useCalendarDayActivator();
+  const selectionRef = useCalendarDaySelection();
+  const resizeRef = useCalendarDayResize();
+  const interactionRef = useCalendarDayInteraction();
 
   return (
     <div ref={ref} {...props}>
@@ -50,7 +50,7 @@ const CalendarWeekView = React.forwardRef<
         <CalendarDayDndProvider>
           <CalendarContextMenu>
             <div
-              ref={mergeRefs(selectionPanel, resizePanel, sectionPanel)}
+              ref={mergeRefs(selectionRef, resizeRef, interactionRef)}
               className="relative grid h-full w-full grid-cols-7"
             >
               {dates.map(({ date }, index) => (
