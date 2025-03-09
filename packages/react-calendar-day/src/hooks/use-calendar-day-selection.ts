@@ -1,9 +1,9 @@
 "use client";
 
-import { addMinutes, rowToTime, useCalendar } from "@illostack/react-calendar";
+import { addMinutes, useCalendar } from "@illostack/react-calendar";
 import * as React from "react";
 
-import { getDateFromXPositon } from "../lib/utils";
+import { computeEventTimeRangeFromPointer } from "../lib/utils";
 
 const useCalendarDaySelection = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -72,7 +72,7 @@ const useCalendarDaySelection = () => {
         });
       };
 
-      const handleContainerMouseMove = (e: MouseEvent) => {
+      const handleContainerMouseMove = (event: MouseEvent) => {
         const isDragging = calendar.getIsDragging();
         const isResizingTop = calendar.getIsResizingTop();
         const isResizingBottom = calendar.getIsResizingBottom();
@@ -82,16 +82,11 @@ const useCalendarDaySelection = () => {
           return;
         }
 
-        const rect = containerRef.current?.getBoundingClientRect();
-        if (!rect) return;
-
-        const { minutesPerRow, totalRows } = calendar.getLayout();
-
-        const y = e.clientY - rect.top;
-        const x = e.clientX - rect.left;
-        const row = Math.floor((y / rect.height) * totalRows);
-        const colDate = getDateFromXPositon(x, rect.width, calendar);
-        const startAt = rowToTime(colDate, row, calendar);
+        const { startAt } = computeEventTimeRangeFromPointer(
+          event,
+          container,
+          calendar
+        );
 
         const selection = calendar.getSelection();
 
@@ -107,6 +102,8 @@ const useCalendarDaySelection = () => {
         if (!initDate) {
           return;
         }
+
+        const { minutesPerRow } = calendar.getLayout();
 
         if (startAt < initDate) {
           const endAt = new Date(initDate);
