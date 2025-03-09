@@ -95,6 +95,8 @@ const DialogComponent = ({
         clearTimeout(timeout);
       };
     }
+
+    return;
   }, [_onClose, id, open]);
 
   function toggle(state: boolean) {
@@ -128,7 +130,7 @@ const DialogComponent = ({
           <DrawerTitle>{title}</DrawerTitle>
           {description && <DrawerDescription>{description}</DrawerDescription>}
         </DrawerHeader>
-        <div className="flex flex-grow flex-col overflow-y-auto">
+        <div className="flex flex-grow flex-col overflow-y-auto px-6 pb-6">
           {render(onClose)}
         </div>
       </DrawerContent>
