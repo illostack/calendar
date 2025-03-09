@@ -3,7 +3,7 @@
 import { useCalendar } from "@illostack/react-calendar";
 import * as React from "react";
 
-import { getDateFromPointerPosition } from "../lib/utils";
+import { computeEventTimeRangeFromPointer } from "../lib/utils";
 
 const useCalendarMonthSelection = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -72,7 +72,7 @@ const useCalendarMonthSelection = () => {
         });
       };
 
-      const handleContainerMouseMove = (e: MouseEvent) => {
+      const handleContainerMouseMove = (event: MouseEvent) => {
         const isDragging = calendar.getIsDragging();
         const isResizingTop = calendar.getIsResizingTop();
         const isResizingBottom = calendar.getIsResizingBottom();
@@ -82,16 +82,9 @@ const useCalendarMonthSelection = () => {
           return;
         }
 
-        const rect = containerRef.current?.getBoundingClientRect();
-        if (!rect) return;
-
-        const y = e.clientY - rect.top;
-        const x = e.clientX - rect.left;
-
-        const { startAt, endAt } = getDateFromPointerPosition(
-          x,
-          y,
-          rect,
+        const { startAt, endAt } = computeEventTimeRangeFromPointer(
+          event,
+          container,
           calendar
         );
 
@@ -99,7 +92,7 @@ const useCalendarMonthSelection = () => {
 
         if (!selection) {
           initSelectionRef.current = startAt;
-          calendar.startSelection({ startAt, endAt: startAt });
+          calendar.startSelection({ startAt, endAt });
 
           return;
         }
@@ -111,6 +104,7 @@ const useCalendarMonthSelection = () => {
         }
 
         if (startAt < initDate) {
+          const endAt = new Date(initDate);
           calendar.updateSelection({ startAt, endAt });
         } else if (startAt > initDate) {
           calendar.updateSelection({ startAt: initDate, endAt });
