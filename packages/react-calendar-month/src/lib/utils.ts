@@ -41,8 +41,8 @@ const computeEventTimeRangeFromPointer = (
     date.getFullYear(),
     date.getMonth(),
     date.getDate(),
-    23,
-    59
+    24,
+    0
   );
 
   return { startAt, endAt };
@@ -77,22 +77,17 @@ const computeEventBoundsFromCard = (
 
   const date = dates.at(row * 7 + column)?.date as Date;
 
-  const startAtDate = new Date(
+  const startAt = new Date(
     date.getFullYear(),
     date.getMonth(),
     date.getDate(),
     event.startAt.getHours(),
     event.startAt.getMinutes()
   );
-  const endAtDate = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-    event.endAt.getHours(),
-    event.endAt.getMinutes()
-  );
+  const eventDuration = event.endAt.getTime() - event.startAt.getTime();
+  const endAt = new Date(startAt.getTime() + eventDuration);
 
-  return { startAt: startAtDate, endAt: endAtDate };
+  return { startAt, endAt };
 };
 
 export { computeEventBoundsFromCard, computeEventTimeRangeFromPointer };

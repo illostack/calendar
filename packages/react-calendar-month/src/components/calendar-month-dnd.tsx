@@ -24,7 +24,7 @@ const CalendarMonthDndProvider = React.memo(
     const sensors = React.useMemo(
       () => [
         PointerSensor.configure({
-          activationConstraints: { distance: { value: 10 } }
+          activationConstraints: { distance: { value: 5 } }
         }),
         KeyboardSensor
       ],

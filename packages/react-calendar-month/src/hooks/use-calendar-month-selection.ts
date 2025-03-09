@@ -1,6 +1,6 @@
 "use client";
 
-import { useCalendar } from "@illostack/react-calendar";
+import { addDays, useCalendar } from "@illostack/react-calendar";
 import * as React from "react";
 
 import { computeEventTimeRangeFromPointer } from "../lib/utils";
@@ -104,7 +104,7 @@ const useCalendarMonthSelection = () => {
         }
 
         if (startAt < initDate) {
-          const endAt = new Date(initDate);
+          const endAt = addDays(new Date(initDate), 1);
           calendar.updateSelection({ startAt, endAt });
         } else if (startAt > initDate) {
           calendar.updateSelection({ startAt: initDate, endAt });

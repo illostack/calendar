@@ -9,11 +9,7 @@ const isSameDay = (d1: Date, d2: Date) => {
 };
 
 const isDateBetween = (date: Date, startDate: Date, endDate: Date) => {
-  return (
-    (date >= startDate && date <= endDate) ||
-    isSameDay(date, startDate) ||
-    isSameDay(date, endDate)
-  );
+  return date > startDate && date < endDate;
 };
 
 const isDatesBetween = (
@@ -23,10 +19,10 @@ const isDatesBetween = (
   endDate: Date
 ) => {
   return (
-    (dateStart >= startDate && dateStart <= endDate) ||
-    (dateEnd >= startDate && dateEnd <= endDate) ||
-    (startDate >= dateStart && startDate <= dateEnd) ||
-    (endDate >= dateStart && endDate <= dateEnd)
+    (dateStart > startDate && dateStart < endDate) ||
+    (dateEnd > startDate && dateEnd < endDate) ||
+    (startDate > dateStart && startDate < dateEnd) ||
+    (endDate > dateStart && endDate < dateEnd)
   );
 };
 

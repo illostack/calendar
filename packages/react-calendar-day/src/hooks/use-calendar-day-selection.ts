@@ -107,7 +107,6 @@ const useCalendarDaySelection = () => {
 
         if (startAt < initDate) {
           const endAt = new Date(initDate);
-          const { minutesPerRow } = calendar.getLayout();
           endAt.setMinutes(endAt.getMinutes() + minutesPerRow);
           calendar.updateSelection({ startAt, endAt });
         } else if (startAt > initDate) {
