@@ -1,5 +1,4 @@
 export * from "./components/calendar";
-export * from "./components/calendar-context-menu";
 export * from "./components/calendar-event-card";
 export * from "./components/calendar-time-indicator";
 
