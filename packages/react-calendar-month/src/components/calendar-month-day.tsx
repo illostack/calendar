@@ -100,7 +100,7 @@ const CalendarMonthDay: React.FC<CalendarMonthDayProps> = React.memo(
     return (
       <div
         className={cn(
-          "pointer-events-none relative flex flex-col gap-1",
+          "pointer-events-none relative flex flex-col gap-1 overflow-hidden",
           index % 7 === 0 ? "border-l-0" : "border-l",
           index < 7 ? "border-t-0" : "border-t",
           isOutside ? "text-muted-foreground bg-muted/40" : "text-foreground"
@@ -109,7 +109,7 @@ const CalendarMonthDay: React.FC<CalendarMonthDayProps> = React.memo(
         <div className="relative flex flex-none justify-center px-1 pt-1">
           <CalendarMonthDayButton date={date} />
         </div>
-        <div className="flex-grow">
+        <div className="flex-grow overflow-hidden">
           <div className="relative grid h-full w-full grid-rows-4 gap-y-px">
             <CalendarMonthActiveResize date={date} />
             <CalendarMonthViewEventsPanel date={date} />
