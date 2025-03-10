@@ -52,12 +52,14 @@ const CalendarMonthView = React.forwardRef<
         view.classList.add(
           "animate-in",
           "slide-in-from-right-1/4",
+          "fade-in",
           "duration-300"
         );
         const timeout = setTimeout(() => {
           view.classList.remove(
             "animate-in",
             "slide-in-from-right-1/4",
+            "fade-in",
             "duration-300"
           );
         }, 300);
@@ -69,12 +71,14 @@ const CalendarMonthView = React.forwardRef<
         view.classList.add(
           "animate-in",
           "slide-in-from-left-1/4",
+          "fade-in",
           "duration-300"
         );
         const timeout = setTimeout(() => {
           view.classList.remove(
             "animate-in",
             "slide-in-from-left-1/4",
+            "fade-in",
             "duration-300"
           );
         }, 300);
