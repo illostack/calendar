@@ -4,6 +4,7 @@ import {
   CalendarTimeIndicator,
   CalendarView,
   addDays,
+  formatDate,
   mergeRefs,
   useCalendar
 } from "@illostack/react-calendar";
@@ -27,14 +28,66 @@ const CalendarDaysViewTemplate = React.forwardRef<
   HTMLDivElement,
   CalendarDayViewProps
 >((props, ref) => {
+  const viewRef = React.useRef<HTMLDivElement>(null);
   const calendar = useCalendar();
   const dates = calendar.useWatch((s) => s.dates);
   const selectionRef = useCalendarDaySelection();
   const resizeRef = useCalendarDayResize();
   const interactionRef = useCalendarDayInteraction();
 
+  calendar.useEffect(
+    (s) => s.date,
+    (state, previousState) => {
+      const view = viewRef.current;
+
+      if (!view) {
+        return;
+      }
+
+      if (formatDate(state.date) === formatDate(previousState.date)) {
+        return;
+      }
+
+      if (state.date > previousState.date) {
+        view.classList.add(
+          "animate-in",
+          "slide-in-from-right-1/4",
+          "duration-300"
+        );
+        const timeout = setTimeout(() => {
+          view.classList.remove(
+            "animate-in",
+            "slide-in-from-right-1/4",
+            "duration-300"
+          );
+        }, 300);
+
+        return () => clearTimeout(timeout);
+      }
+
+      if (state.date < previousState.date) {
+        view.classList.add(
+          "animate-in",
+          "slide-in-from-left-1/4",
+          "duration-300"
+        );
+        const timeout = setTimeout(() => {
+          view.classList.remove(
+            "animate-in",
+            "slide-in-from-left-1/4",
+            "duration-300"
+          );
+        }, 300);
+
+        return () => clearTimeout(timeout);
+      }
+
+      return;
+    }
+  );
+
   return (
-    <div ref={ref} {...props}>
+    <div ref={mergeRefs(viewRef, ref)} {...props}>
       <CalendarDayHeader dates={dates} />
       <div
         style={{
