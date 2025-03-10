@@ -36,20 +36,6 @@ const CalendarTimeIndicator = React.memo<CalendarTimeIndicatorProps>(() => {
     [currentDate, date]
   );
 
-  React.useEffect(() => {
-    const line = lineRef.current;
-
-    if (!line) {
-      return;
-    }
-
-    if (isCurrentDay) {
-      line.scrollIntoView({
-        block: "center"
-      });
-    }
-  }, [isCurrentDay]);
-
   if (currentPosition === null) {
     return null;
   }
