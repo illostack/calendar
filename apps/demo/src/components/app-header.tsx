@@ -12,7 +12,6 @@ import {
   CloudUploadIcon,
   Search
 } from "lucide-react";
-import { parseAsNumberLiteral, useQueryState } from "nuqs";
 
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { ThemeSwitcher } from "@/components/theme-switcher";
@@ -41,11 +40,6 @@ type AppHeaderProps = React.HTMLAttributes<HTMLDivElement>;
 const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
   const isMobile = useIsMobile();
 
-  const [days, setDays] = useQueryState<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9>(
-    "days",
-    parseAsNumberLiteral([1, 2, 3, 4, 5, 6, 7, 8, 9]).withDefault(1)
-  );
-
   const isCreatingEvent = useIsMutating({
     mutationKey: ["createEvent"]
   });
@@ -62,7 +56,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
 
   const calendar = useCalendar();
 
-  const view = calendar.useWatch((state) => state.view);
+  const view = calendar.useWatch((state) => state.currentView);
   const date = calendar.useWatch((state) => state.date);
   const dates = calendar.useWatch((state) => state.dates);
 
@@ -82,7 +76,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
         dates.at(0)?.date as Date,
         dates.at(-1)?.date as Date
       )
-    }[view];
+    }[view.id];
   }, [calendar, date, isMobile, view, dates]);
 
   React.useEffect(() => {
@@ -117,8 +111,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
       ...Array.from({ length: 9 }).map((_, index) => ({
         key: `${index + 2}`,
         handler: () => {
-          calendar.changeView("range");
-          setDays((index + 2) as 1);
+          calendar.changeView("range", {
+            days: index + 2
+          });
         }
       }))
     ];
@@ -140,7 +135,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [calendar, isMobile, setDays]);
+  }, [calendar, isMobile]);
 
   useSwipe(calendar.increaseDate, calendar.decreaseDate, 50);
 
@@ -199,30 +194,30 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="w-28 justify-between">
-                {view === "range"
-                  ? `${days} ${translations.literals.days}`
-                  : translations.literals[view as "day" | "week" | "month"]}
+                {view.id === "range"
+                  ? `${view.meta.days} ${translations.literals.days}`
+                  : translations.literals[view.id as "day" | "week" | "month"]}
                 <ChevronDownIcon className="-ml-2 -mr-1" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuGroup>
                 <DropdownMenuCheckboxItem
-                  checked={view === "day"}
+                  checked={view.id === "day"}
                   onSelect={() => calendar.changeView("day")}
                 >
                   {translations.literals.day}
                   <DropdownMenuShortcut>{"D"}</DropdownMenuShortcut>
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
-                  checked={view === "week"}
+                  checked={view.id === "week"}
                   onSelect={() => calendar.changeView("week")}
                 >
                   {translations.literals.week}
                   <DropdownMenuShortcut>{"W"}</DropdownMenuShortcut>
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
-                  checked={view === "month"}
+                  checked={view.id === "month"}
                   onSelect={() => calendar.changeView("month")}
                 >
                   {translations.literals.month}
@@ -244,9 +239,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className, ...props }) => {
                             calendar.changeView("range", {
                               days: index + 2
                             });
-                            setDays((index + 2) as 1);
                           }}
-                          checked={view === "range" && days === index + 2}
+                          checked={
+                            view.id === "range" && view.meta.days === index + 2
+                          }
                         >
                           {index + 2} {translations.literals.days}
                           <DropdownMenuShortcut>

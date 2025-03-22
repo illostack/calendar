@@ -1,34 +1,24 @@
 "use client";
 
-import {
-  Calendar,
-  CalendarContent,
-  CalendarEvent,
-  CalendarProvidedEvent
-} from "@illostack/react-calendar";
-import * as React from "react";
-
+import { Calendar, CalendarContent } from "@illostack/react-calendar";
 import { CalendarDayView } from "@illostack/react-calendar-day";
 import { CalendarMonthView } from "@illostack/react-calendar-month";
 import { CalendarRangeView } from "@illostack/react-calendar-range";
 import { CalendarWeekView } from "@illostack/react-calendar-week";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 import {
   parseAsIsoDate,
   parseAsNumberLiteral,
   parseAsStringEnum,
-  useQueryState
+  useQueryStates
 } from "nuqs";
+import * as React from "react";
 
 import { AppHeader } from "@/components/app-header";
 import { SidebarLeft } from "@/components/sidebar-left";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { useTheme } from "next-themes";
-
-const API_DELAY = 300;
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { useFakeApi } from "@/hooks/use-fake-api";
 
 export default function Page({
   params
@@ -41,105 +31,49 @@ export default function Page({
   const t = useTranslations();
   const { theme = "system" } = useTheme();
 
-  const [view, setView] = useQueryState<"day" | "week" | "month" | "range">(
-    "view",
-    parseAsStringEnum(["day", "week", "month", "range"]).withDefault("day")
+  const { events, createEvent, deleteEvent, updateEvent } = useFakeApi();
+
+  const [{ view, days, date }, setState] = useQueryStates({
+    view: parseAsStringEnum(["day", "week", "month", "range"]).withDefault(
+      "day"
+    ),
+    days: parseAsNumberLiteral([1, 2, 3, 4, 5, 6, 7, 8, 9]).withDefault(1),
+    date: parseAsIsoDate.withDefault(new Date())
+  });
+
+  const views = React.useMemo(
+    () => [
+      CalendarDayView,
+      CalendarWeekView,
+      CalendarRangeView.configure({ days }),
+      CalendarMonthView
+    ],
+    [days]
   );
-  const [days, setDays] = useQueryState<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9>(
-    "days",
-    parseAsNumberLiteral([1, 2, 3, 4, 5, 6, 7, 8, 9]).withDefault(1)
-  );
-  const [date, setDate] = useQueryState<Date>(
-    "date",
-    parseAsIsoDate.withDefault(new Date())
-  );
-
-  const queryClient = useQueryClient();
-
-  const { data } = useQuery<
-    CalendarProvidedEvent[],
-    Error,
-    CalendarProvidedEvent[]
-  >({
-    queryKey: ["events"],
-    queryFn: async () => {
-      return [];
-    }
-  });
-
-  const { mutateAsync: createEvent } = useMutation<
-    CalendarEvent,
-    Error,
-    CalendarEvent
-  >({
-    mutationKey: ["createEvent"],
-    mutationFn: async (event) => {
-      queryClient.setQueryData(["events"], (data: CalendarEvent[]) => {
-        return [...data, event];
-      });
-
-      await wait(API_DELAY);
-
-      return event;
-    }
-  });
-
-  const { mutateAsync: updateEvent } = useMutation<
-    CalendarEvent,
-    Error,
-    CalendarEvent
-  >({
-    mutationKey: ["updateEvent"],
-    mutationFn: async (event) => {
-      queryClient.setQueryData(["events"], (data: CalendarEvent[]) => {
-        return data.map((e) => (e.id === event.id ? event : e));
-      });
-
-      await wait(API_DELAY);
-
-      return event;
-    }
-  });
-
-  const { mutateAsync: deleteEvent } = useMutation<
-    CalendarEvent,
-    Error,
-    CalendarEvent
-  >({
-    mutationKey: ["deleteEvent"],
-    mutationFn: async (event) => {
-      queryClient.setQueryData(["events"], (data: CalendarEvent[]) => {
-        return data.filter((e) => e.id !== event.id);
-      });
-
-      await wait(API_DELAY);
-
-      return event;
-    }
-  });
 
   return (
     <Calendar
-      views={[
-        CalendarDayView,
-        CalendarWeekView,
-        CalendarRangeView.configure({ days }),
-        CalendarMonthView
-      ]}
+      views={views}
       initialView={view}
-      events={data}
+      events={events}
       initialDate={date}
       weekStartsOn={locale === "es" ? 1 : 0}
       locale={locale}
       onViewChange={(view) => {
-        setView(view);
-        setDays(days);
+        const { id, meta } = view;
+
+        setState({
+          view: id,
+          days: (meta.days ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+        });
       }}
       minutesPerRow={15}
       rowHeight={14}
       startHour={0}
       endHour={23}
-      onDateChange={setDate}
+      onDateChange={(date) => {
+        setState({ date });
+      }}
       onEventCreate={createEvent}
       onEventUpdate={updateEvent}
       onEventDelete={deleteEvent}
