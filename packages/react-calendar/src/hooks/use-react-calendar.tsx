@@ -150,7 +150,7 @@ export const useReactCalendar = <
         currentView: view,
         date: state.date
       }));
-      onViewChange?.(viewId);
+      onViewChange?.(view);
     },
 
     // Date feature

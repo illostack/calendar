@@ -494,7 +494,7 @@ export interface CalendarOptions<
       TViews[number]["id"],
       TViews[number]["meta"],
       Parameters<TViews[number]["configure"]>[0]
-    >["id"]
+    >
   ) => void;
   onDateChange?: (date: Date) => void;
   onEventCreate?: (event: CalendarEvent<TEvent>) => void;
