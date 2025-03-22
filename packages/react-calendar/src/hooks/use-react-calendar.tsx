@@ -160,7 +160,7 @@ export const useReactCalendar = <
     getDefaultEventDuration: () => storeRef.current.state.defaultEventDuration,
     changeDate: (date, viewId, viewConfiguration) => {
       let view = (
-        viewId
+        viewId !== undefined
           ? storeRef.current.state.views.find((v) => v.id === viewId)
           : storeRef.current.state.currentView
       ) as CalendarView<
@@ -169,7 +169,7 @@ export const useReactCalendar = <
         Parameters<TViews[number]["configure"]>[0]
       >;
 
-      if (viewConfiguration) {
+      if (viewConfiguration !== undefined) {
         view = view?.configure(viewConfiguration);
       }
 
