@@ -1,7 +1,7 @@
 "use client";
 
-import { showDialog, showSheet, toast } from "@illostack/react-calendar-ui";
 import { createStore, useStore, useStoreEffect } from "@illostack/react-store";
+import { showDialog, showSheet, toast } from "@illostack/ui";
 import * as React from "react";
 
 import { CalendarEventForm } from "../components/calendar-event-form";
@@ -62,6 +62,7 @@ export const useReactCalendar = <
   views,
   initialDate = new Date(),
   formView = DEFAULT_FORM_VIEW,
+  disableAnimation = false,
   rowHeight = DEFAULT_ROW_HEIGHT,
   minutesPerRow = DEFAULT_MINUTES_PER_ROW,
   startHour = DEFAULT_START_HOUR,
@@ -82,7 +83,7 @@ export const useReactCalendar = <
 }: UseCalendarOptions<TEvent, TViews>) => {
   const storeRef = React.useRef(
     (() => {
-      const initView = views.find((v) => v.id === initialView) ?? views[0];
+      const initView = views.find((v) => v.id === initialView) ?? views[0]!;
 
       return createStore<CalendarState<TEvent, TViews>>({
         events: normalizeEvents(events),
@@ -97,7 +98,8 @@ export const useReactCalendar = <
           rowHeight,
           minutesPerRow,
           startHour,
-          endHour
+          endHour,
+          disableAnimation
         }),
         device: {
           modifierKeyPrefix: getModifierKeyPrefix()

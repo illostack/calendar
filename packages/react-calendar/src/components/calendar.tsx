@@ -1,15 +1,11 @@
 "use client";
 
-import {
-  DialogContainer,
-  SheetContainer,
-  Toaster
-} from "@illostack/react-calendar-ui";
+import { DialogContainer, SheetContainer, Toaster } from "@illostack/ui";
 import * as React from "react";
 
 import { useReactCalendar } from "../hooks/use-react-calendar";
 import { timeToPosition } from "../lib/position";
-import { isDatesBetween } from "../lib/time";
+import { formatDate, isDatesBetween } from "../lib/time";
 import {
   CalendarApi,
   CalendarEvent,
@@ -148,14 +144,72 @@ interface CalendarContentProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const CalendarContent = React.memo<CalendarContentProps>((props) => {
+  const viewRef = React.useRef<HTMLDivElement>(null);
   const calendar = useCalendar();
   const currentView = calendar.useWatch((s) => s.currentView);
 
-  return <currentView.content {...props} />;
+  calendar.useEffect(
+    (s) => s.date,
+    (state, previousState) => {
+      if (calendar.getLayout().disableAnimation) {
+        return;
+      }
+
+      const view = viewRef.current;
+
+      if (!view) {
+        return;
+      }
+
+      if (formatDate(state.date) === formatDate(previousState.date)) {
+        return;
+      }
+
+      if (state.date > previousState.date) {
+        view.classList.add(
+          "animate-in",
+          "slide-in-from-right-1/4",
+          "fade-in",
+          "duration-300"
+        );
+        const timeout = setTimeout(() => {
+          view.classList.remove(
+            "animate-in",
+            "slide-in-from-right-1/4",
+            "fade-in",
+            "duration-300"
+          );
+        }, 300);
+
+        return () => clearTimeout(timeout);
+      }
+
+      if (state.date < previousState.date) {
+        view.classList.add(
+          "animate-in",
+          "slide-in-from-left-1/4",
+          "fade-in",
+          "duration-300"
+        );
+        const timeout = setTimeout(() => {
+          view.classList.remove(
+            "animate-in",
+            "slide-in-from-left-1/4",
+            "fade-in",
+            "duration-300"
+          );
+        }, 300);
+
+        return () => clearTimeout(timeout);
+      }
+
+      return;
+    }
+  );
+
+  return <currentView.content ref={viewRef} {...props} />;
 });
 CalendarContent.displayName = "CalendarContent";
-
-// =================== HOOKS ADICIONALES ===================
 
 const useCalendarPosition = (date: Date, startAt: Date, endAt: Date) => {
   const calendar = useCalendar();

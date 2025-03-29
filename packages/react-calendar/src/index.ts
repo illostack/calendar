@@ -10,15 +10,3 @@ export * from "./lib/utils";
 export * from "./hooks/use-react-calendar";
 
 export * from "./types";
-
-// Re-export DnD Kit
-export * from "@dnd-kit/abstract";
-export {
-  DragDropManager,
-  Draggable,
-  Droppable,
-  KeyboardSensor,
-  PointerSensor
-} from "@dnd-kit/dom";
-export * from "@dnd-kit/dom/modifiers";
-export * from "@dnd-kit/react";

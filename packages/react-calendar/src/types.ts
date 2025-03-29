@@ -64,6 +64,7 @@ export type CalendarTranslations = {
     next: string;
     range: string;
     more: string;
+    "go-to": string;
   };
   form: {
     save: string;
@@ -272,6 +273,7 @@ export interface CalendarState<
     endOffset: number;
     calendarHeight: number;
     hours: number[];
+    disableAnimation: boolean;
   };
 
   // Device configuration
@@ -488,6 +490,11 @@ export interface CalendarOptions<
    * @default "dialog"
    */
   formView?: "dialog" | "sheet";
+  /**
+   * Disable animation
+   * @default false
+   */
+  disableAnimation?: boolean;
 
   onViewChange?: (
     view: CalendarView<

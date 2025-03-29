@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@illostack/react-calendar-ui";
+import { cn } from "@illostack/ui";
 import * as React from "react";
 
 import { isSameDay } from "../lib/time";
