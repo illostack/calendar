@@ -11,7 +11,7 @@
     "@illostack/react-calendar-week": "0.0.1",
     "@illostack/react-store": "0.0.1",
     "@illostack/typescript-config": "0.0.1",
-    "@illostack/ui": "0.0.1"
+    "@illostack/react-calendar-ui": "0.0.1"
   },
   "changesets": []
 }
