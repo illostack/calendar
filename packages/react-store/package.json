@@ -13,16 +13,13 @@
   },
   "homepage": "https://github.com/illostack/calendar",
   "scripts": {
-    "build": "tsc"
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
   },
-  "type": "module",
-  "files": [
-    "build",
-    "src"
-  ],
   "devDependencies": {
+    "@illostack/eslint-config": "workspace:*",
+    "@illostack/typescript-config": "workspace:*",
     "@types/react": "^19.0.0",
     "react": "^19.0.0"
-  },
-  "packageManager": "pnpm@9.9.0"
+  }
 }
