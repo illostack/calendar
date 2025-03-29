@@ -6,6 +6,9 @@
   "author": "illodev",
   "license": "MIT",
   "exports": "./src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/illostack/calendar.git",
