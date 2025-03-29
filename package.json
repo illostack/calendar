@@ -11,9 +11,6 @@
     "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "lint-staged": {
-    "**/*.{js,ts,tsx}": [
-      "eslint --fix"
-    ],
     "**/*": "prettier --write --ignore-unknown"
   },
   "devDependencies": {
