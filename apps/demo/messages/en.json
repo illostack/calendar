@@ -94,7 +94,8 @@
     "today": "Today",
     "previous": "Previous",
     "next": "Next",
-    "more": "More"
+    "more": "More",
+    "go-to": "Go to"
   },
   "form": {
     "save": "Save"

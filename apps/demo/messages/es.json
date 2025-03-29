@@ -94,7 +94,8 @@
     "today": "Hoy",
     "previous": "Anterior",
     "next": "Siguiente",
-    "more": "Más"
+    "more": "Más",
+    "go-to": "Ir a"
   },
   "form": {
     "save": "Guardar"
