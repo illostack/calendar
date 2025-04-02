@@ -39,8 +39,24 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 240 5% 64.9%;
 
-    --calendar-primary: 221.2 83.2% 53.3%;
-    --calendar-radius: 0.25rem;
+    --calendar-background: var(--background);
+    --calendar-foreground: var(--foreground);
+    --calendar-primary: var(--primary);
+    --calendar-primary-foreground: var(--primary-foreground);
+    --calendar-accent: var(--accent);
+    --calendar-accent-foreground: var(--accent-foreground);
+    --calendar-border: var(--border);
+    --calendar-ring: var(--ring);
+    --calendar-radius: var(--radius);
+
+    --calendar-blue: 217.2 91.2% 59.8%;
+    --calendar-green: 142.1 70.6% 45.3%;
+    --calendar-red: 0 84.2% 60.2%;
+    --calendar-yellow: 45.4 93.4% 47.5%;
+    --calendar-purple: 238.7 83.5% 66.7%;
+    --calendar-pink: 330.4 81.2% 60.4%;
+    --calendar-indigo: 238.7 83.5% 66.7%;
+    --calendar-cyan: 188.7 94.5% 42.7%;
   }
 
   .dark {
@@ -77,8 +93,6 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 240 4.9% 83.9%;
-
-    --calendar-primary: 217.2 91.2% 59.8%;
   }
 
   * {
