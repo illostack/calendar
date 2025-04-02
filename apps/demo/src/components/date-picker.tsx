@@ -35,7 +35,8 @@ export function DatePicker() {
           key={date.toISOString() + view}
           mode="range"
           selected={selected}
-          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           locale={{
             code: locale,
             localize: {
