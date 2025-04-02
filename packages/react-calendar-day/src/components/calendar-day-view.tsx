@@ -2,127 +2,62 @@
 
 import {
   CalendarTimeIndicator,
-  CalendarView,
   addDays,
-  formatDate,
+  createCalendarView,
   mergeRefs,
   useCalendar
 } from "@illostack/react-calendar";
 import React from "react";
 
+import { useCalendarDayDrag } from "../hooks/use-calendar-day-drag";
 import { useCalendarDayInteraction } from "../hooks/use-calendar-day-interaction";
 import { useCalendarDayResize } from "../hooks/use-calendar-day-resize";
 import { useCalendarDaySelection } from "../hooks/use-calendar-day-selection";
+import { CalendarDayActiveDrag } from "./calendar-day-active-drag";
+import { CalendarDayActiveResize } from "./calendar-day-active-resize";
+import { CalendarDayActiveSection } from "./calendar-day-active-section";
+import { CalendarDayActiveSelection } from "./calendar-day-active-selection";
 import { CalendarDayAxis } from "./calendar-day-axis";
-import { CalendarDayContent } from "./calendar-day-content";
 import { CalendarDayContextMenu } from "./calendar-day-context-menu";
-import { CalendarDayDndProvider } from "./calendar-day-dnd";
-import { CalendarDayDndOverlay } from "./calendar-day-dnd-overlay";
+import { CalendarDayEvents } from "./calendar-day-events";
 import { CalendarDayHeader } from "./calendar-day-header";
 
-interface CalendarDayViewProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string;
-}
+interface CalendarDayViewProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const CalendarDaysViewTemplate = React.forwardRef<
   HTMLDivElement,
   CalendarDayViewProps
 >((props, ref) => {
-  const viewRef = React.useRef<HTMLDivElement>(null);
   const calendar = useCalendar();
   const dates = calendar.useWatch((s) => s.dates);
   const selectionRef = useCalendarDaySelection();
   const resizeRef = useCalendarDayResize();
   const interactionRef = useCalendarDayInteraction();
-
-  calendar.useEffect(
-    (s) => s.date,
-    (state, previousState) => {
-      const view = viewRef.current;
-
-      if (!view) {
-        return;
-      }
-
-      if (formatDate(state.date) === formatDate(previousState.date)) {
-        return;
-      }
-
-      if (state.date > previousState.date) {
-        view.classList.add(
-          "animate-in",
-          "slide-in-from-right-1/4",
-          "fade-in",
-          "duration-300"
-        );
-        const timeout = setTimeout(() => {
-          view.classList.remove(
-            "animate-in",
-            "slide-in-from-right-1/4",
-            "fade-in",
-            "duration-300"
-          );
-        }, 300);
-
-        return () => clearTimeout(timeout);
-      }
-
-      if (state.date < previousState.date) {
-        view.classList.add(
-          "animate-in",
-          "slide-in-from-left-1/4",
-          "fade-in",
-          "duration-300"
-        );
-        const timeout = setTimeout(() => {
-          view.classList.remove(
-            "animate-in",
-            "slide-in-from-left-1/4",
-            "fade-in",
-            "duration-300"
-          );
-        }, 300);
-
-        return () => clearTimeout(timeout);
-      }
-
-      return;
-    }
-  );
+  const dragRef = useCalendarDayDrag();
 
   return (
-    <div ref={mergeRefs(viewRef, ref)} {...props}>
+    <div ref={ref} {...props}>
       <CalendarDayHeader dates={dates} />
       <div
+        className="relative w-full select-none pl-20"
         style={{
-          height: calendar.getLayout().calendarHeight,
-          width: "100%",
-          position: "relative",
-          userSelect: "none",
-          paddingLeft: "5rem"
+          height: calendar.getLayout().calendarHeight
         }}
       >
         <CalendarDayAxis dates={dates} />
         <CalendarTimeIndicator />
-        <CalendarDayDndProvider>
-          <CalendarDayContextMenu>
-            <div
-              ref={mergeRefs(selectionRef, resizeRef, interactionRef)}
-              style={{
-                height: "100%",
-                width: "100%",
-                position: "relative",
-                display: "grid",
-                gridTemplateColumns: `repeat(${dates.length}, 1fr)`
-              }}
-            >
-              {dates.map(({ date }, index) => (
-                <CalendarDayContent key={index} date={date} />
-              ))}
-            </div>
-          </CalendarDayContextMenu>
-          <CalendarDayDndOverlay />
-        </CalendarDayDndProvider>
+        <CalendarDayContextMenu>
+          <div
+            className="relative h-full w-full overflow-hidden"
+            ref={mergeRefs(selectionRef, resizeRef, interactionRef, dragRef)}
+          >
+            <CalendarDayEvents />
+            <CalendarDayActiveResize />
+            <CalendarDayActiveDrag />
+            <CalendarDayActiveSection />
+            <CalendarDayActiveSelection />
+          </div>
+        </CalendarDayContextMenu>
       </div>
     </div>
   );
@@ -133,11 +68,11 @@ const VIEW_ID = "day";
 type CalendarDayMeta = Record<string, unknown>;
 type CalendarDayConfiguration = Record<string, unknown>;
 
-const view: CalendarView<
+const view = createCalendarView<
   typeof VIEW_ID,
   CalendarDayMeta,
   CalendarDayConfiguration
-> = {
+>({
   id: VIEW_ID,
   content: CalendarDaysViewTemplate,
   viewDatesFn(date) {
@@ -153,6 +88,6 @@ const view: CalendarView<
   configure() {
     return this!;
   }
-};
+});
 
 export { view as CalendarDayView, CalendarDaysViewTemplate };
