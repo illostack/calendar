@@ -14,7 +14,7 @@ import {
   RadioGroup,
   RadioGroupItem,
   toast
-} from "@illostack/ui";
+} from "@illostack/react-calendar-ui";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 

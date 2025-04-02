@@ -1,16 +1,10 @@
 "use client";
 
-import { cn } from "@illostack/ui";
+import { cn } from "@illostack/react-calendar-ui";
 import * as React from "react";
 
-import { formatDate } from "../lib/time";
-import { CalendarEvent, CalendarEventWithPosition } from "../types";
-import {
-  useIsActiveEvent,
-  useIsCuttedEvent,
-  useIsDraggingEvent,
-  useIsResizingEvent
-} from "./calendar";
+import { CalendarEvent } from "../types";
+import { useCalendar } from "./calendar";
 
 interface CalendarEventCardResizeHandleProps {
   event: CalendarEvent;
@@ -47,8 +41,7 @@ const CalendarEventCardResizeHandle: React.FC<
 };
 
 interface CalendarEventCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  date: Date;
-  event: CalendarEvent & Partial<CalendarEventWithPosition>;
+  event: CalendarEvent;
   disabledDrag?: boolean;
   disabledResize?: boolean;
   resizeOrientation?: "vertical" | "horizontal";
@@ -61,7 +54,6 @@ const CalendarEventCard = React.forwardRef<
   (
     {
       children,
-      date,
       event,
       className,
       disabledDrag,
@@ -71,33 +63,30 @@ const CalendarEventCard = React.forwardRef<
     },
     ref
   ) => {
-    const isCutted = useIsCuttedEvent(event);
-    const isDragging = useIsDraggingEvent(event);
-    const isResizing = useIsResizingEvent(event);
-    const isActive = useIsActiveEvent(event);
+    const calendar = useCalendar();
+    const isCutted = calendar.useIsCuttedEvent(event.id);
+    const isDragging = calendar.useIsDraggingEvent(event.id);
+    const isResizing = calendar.useIsResizingEvent(event.id);
+    const isActive = calendar.useIsActiveEvent(event.id);
 
     return (
       <div
         ref={ref}
+        tabIndex={0}
         className={cn(
-          "group pointer-events-auto relative right-0 z-[1] select-none p-px",
-          isDragging && "opacity-50",
-          isResizing && "pointer-events-none hidden",
+          "group pointer-events-auto relative select-none p-px",
+          isDragging && "z-10 opacity-0",
+          isResizing && "hidden",
           isCutted && "pointer-events-none opacity-30",
-          isActive && "z-[2]",
+          isActive && "z-10",
           className
         )}
-        style={{
-          position: event.position,
-          top: event.top,
-          left: event.left,
-          height: event.height
-        }}
         draggable="true"
         aria-label={event.summary || "(Untitled)"}
         data-event-id={event.id}
-        data-event-date={formatDate(date)}
-        data-event-state={isActive ? "active" : "inactive"}
+        data-event-state={
+          isActive || isDragging || isResizing ? "active" : "inactive"
+        }
         {...props}
       >
         {children}

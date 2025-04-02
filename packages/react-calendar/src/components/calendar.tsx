@@ -1,15 +1,15 @@
 "use client";
 
-import { DialogContainer, SheetContainer, Toaster } from "@illostack/ui";
+import {
+  DialogContainer,
+  SheetContainer,
+  Toaster
+} from "@illostack/react-calendar-ui";
 import * as React from "react";
 
 import { useReactCalendar } from "../hooks/use-react-calendar";
-import { timeToPosition } from "../lib/position";
-import { formatDate, isDatesBetween } from "../lib/time";
 import {
   CalendarApi,
-  CalendarEvent,
-  CalendarEventWithPosition,
   CalendarOptions,
   CalendarProvidedEvent,
   CalendarView,
@@ -64,44 +64,7 @@ const CalendarProvider = <
 }: CalendarProviderProps<TEvent, TViews>) => {
   const calendar = useReactCalendar(options);
 
-  calendar.useEffect(
-    (state) => state.activeEvent,
-    (s) => {
-      if (s.activeEvent) {
-        const handler = (e: KeyboardEvent) => {
-          // Delete event
-          if (e.key === "Delete") {
-            e.preventDefault();
-            calendar.removeEvent(s.activeEvent?.id!);
-            return;
-          }
-          // Duplicate event
-          if (e.key === "d" && e.ctrlKey) {
-            e.preventDefault();
-            calendar.duplicateEvent(s.activeEvent?.id!);
-            calendar.clearActiveEvent();
-            return;
-          }
-          // Copy event
-          if (e.key === "c" && e.ctrlKey) {
-            e.preventDefault();
-            calendar.copyEvent(s.activeEvent?.id!);
-            return;
-          }
-          // Cut event
-          if (e.key === "x" && e.ctrlKey) {
-            e.preventDefault();
-            calendar.cutEvent(s.activeEvent?.id!);
-            return;
-          }
-        };
-        window.addEventListener("keydown", handler);
-        return () => window.removeEventListener("keydown", handler);
-      }
-
-      return;
-    }
-  );
+  calendar.useActiveEventKeyboardEvents();
 
   return (
     <CalendarContext.Provider
@@ -144,212 +107,14 @@ interface CalendarContentProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const CalendarContent = React.memo<CalendarContentProps>((props) => {
-  const viewRef = React.useRef<HTMLDivElement>(null);
   const calendar = useCalendar();
   const currentView = calendar.useWatch((s) => s.currentView);
 
-  calendar.useEffect(
-    (s) => s.date,
-    (state, previousState) => {
-      if (calendar.getLayout().disableAnimation) {
-        return;
-      }
+  calendar.useViewAnimation();
+  calendar.useViewAutoScroll();
 
-      const view = viewRef.current;
-
-      if (!view) {
-        return;
-      }
-
-      if (formatDate(state.date) === formatDate(previousState.date)) {
-        return;
-      }
-
-      if (state.date > previousState.date) {
-        view.classList.add(
-          "animate-in",
-          "slide-in-from-right-1/4",
-          "fade-in",
-          "duration-300"
-        );
-        const timeout = setTimeout(() => {
-          view.classList.remove(
-            "animate-in",
-            "slide-in-from-right-1/4",
-            "fade-in",
-            "duration-300"
-          );
-        }, 300);
-
-        return () => clearTimeout(timeout);
-      }
-
-      if (state.date < previousState.date) {
-        view.classList.add(
-          "animate-in",
-          "slide-in-from-left-1/4",
-          "fade-in",
-          "duration-300"
-        );
-        const timeout = setTimeout(() => {
-          view.classList.remove(
-            "animate-in",
-            "slide-in-from-left-1/4",
-            "fade-in",
-            "duration-300"
-          );
-        }, 300);
-
-        return () => clearTimeout(timeout);
-      }
-
-      return;
-    }
-  );
-
-  return <currentView.content ref={viewRef} {...props} />;
+  return <currentView.content ref={calendar.viewRef} {...props} />;
 });
 CalendarContent.displayName = "CalendarContent";
 
-const useCalendarPosition = (date: Date, startAt: Date, endAt: Date) => {
-  const calendar = useCalendar();
-
-  return React.useMemo(() => {
-    const { top, height } = timeToPosition(date, startAt, endAt, calendar);
-
-    return { top, height, left: 0, right: 0 };
-  }, [startAt, endAt, date, calendar]);
-};
-
-const useIsInDate = (date: Date, startAt?: Date, endAt?: Date) => {
-  const calendar = useCalendar();
-  const { startHour, endHour } = calendar.getLayout();
-
-  if (!startAt || !endAt) {
-    return false;
-  }
-
-  return isDatesBetween(
-    new Date(date.setHours(startHour, 0, 0, 0)),
-    new Date(date.setHours(endHour, 0, 0, 0)),
-    startAt,
-    endAt
-  );
-};
-
-const useViewEvents = (date: Date) => {
-  const calendar = useCalendar();
-  const { startHour, endHour } = calendar.getLayout();
-  return calendar.useWatch((s) =>
-    s.events.filter((event) =>
-      isDatesBetween(
-        new Date(date.setHours(startHour, 0, 0, 0)),
-        new Date(date.setHours(endHour, 0, 0, 0)),
-        event.startAt,
-        event.endAt
-      )
-    )
-  );
-};
-
-const useEventsWithPosition = (date: Date, events: CalendarEvent[]) => {
-  const calendar = useCalendar();
-
-  return React.useMemo(
-    () =>
-      events.reduce<CalendarEventWithPosition[]>((acc, event) => {
-        const { top, height } = timeToPosition(
-          date,
-          event.startAt,
-          event.endAt,
-          calendar
-        );
-
-        const prevEvent = acc[acc.length - 1];
-
-        // I think this is one of the most efficient ways to calculate the overlap
-        // and the left position of an event
-        if (
-          prevEvent &&
-          top < prevEvent.top + prevEvent.height &&
-          top + height > prevEvent.top
-        ) {
-          const overlap = prevEvent.overlap + 1;
-          const left = overlap * (100 / (overlap + 2)) + "%";
-
-          return [
-            ...acc,
-            {
-              ...event,
-              top,
-              height,
-              overlap,
-              left,
-              right: 0,
-              position: "absolute"
-            }
-          ];
-        }
-
-        return [
-          ...acc,
-          {
-            ...event,
-            top,
-            height,
-            overlap: 0,
-            left: 0,
-            right: 0,
-            position: "absolute"
-          }
-        ];
-      }, []),
-    [date, events, calendar]
-  );
-};
-
-const useIsCuttedEvent = (event: CalendarEvent) => {
-  const calendar = useCalendar();
-  return calendar.useWatch((s) => s.cuttedEvent?.id === event.id);
-};
-
-const useIsDraggingEvent = (event: CalendarEvent) => {
-  const calendar = useCalendar();
-  return calendar.useWatch((s) => s.draggingEvent?.id === event.id);
-};
-
-const useIsResizingEvent = (event: CalendarEvent) => {
-  const calendar = useCalendar();
-  return calendar.useWatch((s) => s.resizingEvent?.id === event.id);
-};
-
-const useIsActiveEvent = (event: CalendarEvent) => {
-  const calendar = useCalendar();
-  return calendar.useWatch((s) => s.activeEvent?.id === event.id);
-};
-
-const useCurrentDate = () => {
-  const [currentDate, setCurrentDate] = React.useState<Date>(new Date());
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 60000);
-    return () => clearInterval(interval);
-  }, []);
-  return currentDate;
-};
-
-export {
-  Calendar,
-  CalendarContent,
-  useCalendar,
-  useCalendarPosition,
-  useCurrentDate,
-  useEventsWithPosition,
-  useIsActiveEvent,
-  useIsCuttedEvent,
-  useIsDraggingEvent,
-  useIsInDate,
-  useIsResizingEvent,
-  useViewEvents
-};
+export { Calendar, CalendarContent, useCalendar };
