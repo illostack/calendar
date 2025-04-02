@@ -1,7 +1,6 @@
 "use client";
 
 import { createStore, useStore } from "@illostack/react-store";
-import type { JSX } from "react";
 import * as React from "react";
 
 import {
@@ -32,7 +31,7 @@ const generateId = () => {
 type DialogContent = {
   title?: string;
   description?: string;
-  render: (onClose: () => void) => JSX.Element;
+  render: (onClose: () => void) => React.ReactNode;
   onClose?: () => void;
 } & React.HTMLAttributes<HTMLDivElement>;
 

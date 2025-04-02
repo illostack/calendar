@@ -1,7 +1,6 @@
 "use client";
 
 import { createStore, useStore } from "@illostack/react-store";
-import type { JSX } from "react";
 import * as React from "react";
 
 import {
@@ -28,7 +27,7 @@ type Sheets = {
 type SheetContent = {
   title?: string;
   description?: string;
-  render: (onClose: () => void) => JSX.Element | Promise<JSX.Element>;
+  render: (onClose: () => void) => React.ReactNode;
   onClose?: () => void;
 } & React.HTMLAttributes<HTMLDivElement>;
 
