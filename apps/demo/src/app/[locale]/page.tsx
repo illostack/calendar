@@ -289,6 +289,7 @@ export default function CalendarLanding() {
                 <a
                   href="https://github.com/illostack/calendar"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className={cn(
                     buttonVariants({
                       variant: "default",
