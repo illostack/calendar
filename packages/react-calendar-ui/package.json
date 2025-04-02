@@ -1,6 +1,6 @@
 {
   "name": "@illostack/react-calendar-ui",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.0",
   "keywords": [],
   "description": "React Calendar UI",
   "author": "illodev",
@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/illostack/calendar",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format cjs,esm",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
   },
   "dependencies": {

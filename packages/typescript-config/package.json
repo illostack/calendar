@@ -1,6 +1,6 @@
 {
   "name": "@illostack/typescript-config",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.0",
   "private": true,
   "license": "MIT",
   "publishConfig": {
