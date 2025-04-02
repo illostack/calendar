@@ -1,6 +1,10 @@
 "use client";
 
-import { addDays, CalendarView, getRangeDays } from "@illostack/react-calendar";
+import {
+  addDays,
+  createCalendarView,
+  getRangeDays
+} from "@illostack/react-calendar";
 import { CalendarDaysViewTemplate } from "@illostack/react-calendar-day";
 
 const VIEW_ID = "range";
@@ -11,11 +15,11 @@ type CalendarRangeConfiguration = {
   days?: number;
 };
 
-const view: CalendarView<
+const view = createCalendarView<
   typeof VIEW_ID,
   CalendarRangeMeta,
   CalendarRangeConfiguration
-> = {
+>({
   id: VIEW_ID,
   content: CalendarDaysViewTemplate,
   viewDatesFn(date) {
@@ -37,6 +41,6 @@ const view: CalendarView<
     this.meta.days = days;
     return this;
   }
-};
+});
 
 export { view as CalendarRangeView };
