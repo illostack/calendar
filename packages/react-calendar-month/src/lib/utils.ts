@@ -1,6 +1,5 @@
 import {
   CalendarApi,
-  CalendarEvent,
   CalendarProvidedEvent,
   CalendarView,
   CalendarViewConfiguration,
@@ -48,46 +47,30 @@ const computeEventTimeRangeFromPointer = (
   return { startAt, endAt };
 };
 
-const computeEventBoundsFromCard = (
-  event: CalendarEvent,
-  cardBounds: DOMRect,
-  containerBounds: DOMRect,
+const computePositionFromTime = (
+  date: Date,
   calendar: CalendarApi<
     CalendarProvidedEvent,
     CalendarView<CalendarViewId, CalendarViewMeta, CalendarViewConfiguration>[]
   >
 ) => {
-  const {
-    y: containerY,
-    width: containerWidth,
-    height: containerHeight,
-    left: containerLeft
-  } = containerBounds;
-  const { left: cardLeft, width: cardWidth, top: cardTop } = cardBounds;
-
   const dates = calendar.getDates();
-
   const monthRows = Math.floor(dates.length / 7);
-  const row = Math.floor(
-    (cardTop - containerY) / (containerHeight / monthRows)
-  );
-  const column = Math.floor(
-    (cardLeft - containerLeft + cardWidth / 2) / (containerWidth / 7)
-  );
+  const monthCols = 7;
 
-  const date = dates.at(row * 7 + column)?.date as Date;
+  const dateIndex = dates.findIndex((d) => {
+    return d.date.toDateString() === date.toDateString();
+  });
 
-  const startAt = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-    event.startAt.getHours(),
-    event.startAt.getMinutes()
-  );
-  const eventDuration = event.endAt.getTime() - event.startAt.getTime();
-  const endAt = new Date(startAt.getTime() + eventDuration);
+  const dateRowIndex = Math.floor(dateIndex / monthCols);
+  const dateColIndex = dateIndex % monthCols;
 
-  return { startAt, endAt };
+  return {
+    top: `${((dateRowIndex / monthRows) * 100).toFixed(2)}%`,
+    height: `${((1 / monthRows) * 100).toFixed(2)}%`,
+    left: `${((dateColIndex / monthCols) * 100).toFixed(2)}%`,
+    width: `${((1 / monthCols) * 100).toFixed(2)}%`
+  };
 };
 
-export { computeEventBoundsFromCard, computeEventTimeRangeFromPointer };
+export { computeEventTimeRangeFromPointer, computePositionFromTime };
