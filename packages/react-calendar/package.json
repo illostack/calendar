@@ -6,6 +6,9 @@
   "author": "illodev",
   "license": "MIT",
   "exports": "./src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/illostack/calendar.git",
@@ -19,7 +22,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@illostack/react-store": "workspace:*",
-    "@illostack/ui": "workspace:*",
+    "@illostack/react-calendar-ui": "workspace:*",
     "react-hook-form": "^7.55.0",
     "zod": "^3.24.2"
   },
