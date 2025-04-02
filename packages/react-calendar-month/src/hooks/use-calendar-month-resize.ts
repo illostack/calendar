@@ -12,14 +12,48 @@ const useCalendarMonthResize = () => {
   calendar.useEffect(
     (s) => s.resizingEvent,
     (s) => {
-      if (!s.resizingEvent) {
-        return;
-      }
-
       const container = containerRef.current;
 
       if (!container) {
         return;
+      }
+
+      if (!s.resizingEvent) {
+        const handleContainerMouseDown = (event: MouseEvent) => {
+          const { resizeTopEventId, resizeBottomEventId } = (
+            event.target as HTMLElement
+          ).dataset;
+
+          if (resizeTopEventId) {
+            event.preventDefault();
+            event.stopPropagation();
+            const calendarEvent = calendar.getEvent(resizeTopEventId);
+
+            if (!calendarEvent) {
+              return;
+            }
+
+            calendar.startResizingTop(calendarEvent);
+          }
+
+          if (resizeBottomEventId) {
+            event.preventDefault();
+            event.stopPropagation();
+            const calendarEvent = calendar.getEvent(resizeBottomEventId);
+
+            if (!calendarEvent) {
+              return;
+            }
+
+            calendar.startResizingBottom(calendarEvent);
+          }
+        };
+
+        container.addEventListener("mousedown", handleContainerMouseDown);
+
+        return () => {
+          container.removeEventListener("mousedown", handleContainerMouseDown);
+        };
       }
 
       const handleResize = (event: MouseEvent) => {
@@ -32,42 +66,38 @@ const useCalendarMonthResize = () => {
         const isResizingTop = calendar.getIsResizingTop();
 
         if (isResizingTop) {
-          requestAnimationFrame(() => {
-            const { startAt } = computeEventTimeRangeFromPointer(
-              event,
-              container,
-              calendar
-            );
+          const { startAt } = computeEventTimeRangeFromPointer(
+            event,
+            container,
+            calendar
+          );
 
-            if (startAt >= resizingEvent.endAt) {
-              return;
-            }
+          if (startAt >= resizingEvent.endAt) {
+            return;
+          }
 
-            calendar.updateResizing({
-              ...resizingEvent,
-              startAt
-            });
+          calendar.updateResizing({
+            ...resizingEvent,
+            startAt
           });
         }
 
         const isResizingBottom = calendar.getIsResizingBottom();
 
         if (isResizingBottom) {
-          requestAnimationFrame(() => {
-            const { endAt } = computeEventTimeRangeFromPointer(
-              event,
-              container,
-              calendar
-            );
+          const { endAt } = computeEventTimeRangeFromPointer(
+            event,
+            container,
+            calendar
+          );
 
-            if (endAt <= resizingEvent.startAt) {
-              return;
-            }
+          if (endAt <= resizingEvent.startAt) {
+            return;
+          }
 
-            calendar.updateResizing({
-              ...resizingEvent,
-              endAt
-            });
+          calendar.updateResizing({
+            ...resizingEvent,
+            endAt
           });
         }
       };
