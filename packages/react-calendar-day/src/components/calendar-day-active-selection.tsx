@@ -3,58 +3,54 @@
 import {
   CalendarSection,
   useCalendar,
-  useCalendarPosition,
-  useIsInDate
+  useDateFragments
 } from "@illostack/react-calendar";
 import React from "react";
+import { useDayViewPosition } from "../hooks/use-day-view-position";
 
 interface CalendarDayActiveSelectionContentProps {
-  date: Date;
+  startAt: Date;
+  endAt: Date;
   selection: CalendarSection;
 }
 
 const CalendarDayActiveSelectionContent =
-  React.memo<CalendarDayActiveSelectionContentProps>(({ date, selection }) => {
-    const { top, height, left, right } = useCalendarPosition(
-      date,
-      selection.startAt,
-      selection.endAt
-    );
+  React.memo<CalendarDayActiveSelectionContentProps>(({ startAt, endAt }) => {
+    const position = useDayViewPosition(startAt, endAt);
 
     return (
       <div
-        style={{
-          position: "absolute",
-          zIndex: 1,
-          pointerEvents: "none",
-          top,
-          left,
-          right,
-          height,
-          backgroundColor: "hsl(var(--calendar-primary) / 0.4)"
-        }}
+        className="pointer-events-none absolute bg-[hsl(var(--calendar-primary)/0.1)]"
+        style={{ ...position }}
       />
     );
   });
 CalendarDayActiveSelectionContent.displayName =
   "CalendarDayActiveSelectionContent";
 
-interface CalendarDayActiveSelectionProps {
-  date: Date;
-}
+interface CalendarDayActiveSelectionProps {}
 
 const CalendarDayActiveSelection = React.memo<CalendarDayActiveSelectionProps>(
-  ({ date }) => {
+  () => {
     const calendar = useCalendar();
     const selection = calendar.useWatch((s) => s.selection);
-    const isInDate = useIsInDate(date, selection?.startAt, selection?.endAt);
+    const fragments = useDateFragments(selection?.startAt, selection?.endAt);
 
-    if (!selection || !isInDate) {
+    if (!selection) {
       return null;
     }
 
     return (
-      <CalendarDayActiveSelectionContent date={date} selection={selection} />
+      <React.Fragment>
+        {fragments.map((fragment) => (
+          <CalendarDayActiveSelectionContent
+            key={fragment.id}
+            startAt={fragment.startAt}
+            endAt={fragment.endAt}
+            selection={selection}
+          />
+        ))}
+      </React.Fragment>
     );
   }
 );

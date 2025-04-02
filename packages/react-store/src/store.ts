@@ -59,7 +59,7 @@ const shallowEqual = <T>(objA: T, objB: T): boolean => {
   if (keysA.length !== Object.keys(objB).length) return false;
 
   for (let i = 0; i < keysA.length; i++) {
-    const key = keysA[i];
+    const key = keysA[i]!;
     if (
       !Object.prototype.hasOwnProperty.call(objB, key) ||
       !Object.is(

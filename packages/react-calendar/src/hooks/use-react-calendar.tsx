@@ -14,11 +14,12 @@ import {
   resolveTranslations,
   sortEvents
 } from "../lib/calendar";
-import { formatDate, formatTime } from "../lib/time";
+import { formatDate, formatTime, isDatesBetween } from "../lib/time";
 import { generateUUID } from "../lib/utils";
 import {
   CalendarApi,
   CalendarEvent,
+  CalendarEventWithOverlap,
   CalendarOptions,
   CalendarProvidedEvent,
   CalendarState,
@@ -62,6 +63,7 @@ export const useReactCalendar = <
   views,
   initialDate = new Date(),
   formView = DEFAULT_FORM_VIEW,
+  disableAnimation = false,
   rowHeight = DEFAULT_ROW_HEIGHT,
   minutesPerRow = DEFAULT_MINUTES_PER_ROW,
   startHour = DEFAULT_START_HOUR,
@@ -80,15 +82,18 @@ export const useReactCalendar = <
   onEventCut,
   onEventPaste
 }: UseCalendarOptions<TEvent, TViews>) => {
+  const viewRef = React.useRef<HTMLDivElement>(null);
+
   const storeRef = React.useRef(
     (() => {
-      const initView = views.find((v) => v.id === initialView) ?? views[0];
+      const initView = views.find((v) => v.id === initialView) ?? views[0]!;
 
       return createStore<CalendarState<TEvent, TViews>>({
         events: normalizeEvents(events),
         date: initialDate,
         dates: initView.viewDatesFn(initialDate, weekStartsOn),
         currentView: initView,
+        viewRef,
         weekStartsOn,
         view: initialView,
         views,
@@ -97,7 +102,8 @@ export const useReactCalendar = <
           rowHeight,
           minutesPerRow,
           startHour,
-          endHour
+          endHour,
+          disableAnimation
         }),
         device: {
           modifierKeyPrefix: getModifierKeyPrefix()
@@ -152,6 +158,7 @@ export const useReactCalendar = <
       }));
       onViewChange?.(view);
     },
+    viewRef: storeRef.current.state.viewRef,
 
     // Date feature
     getDate: () => storeRef.current.state.date,
@@ -258,6 +265,184 @@ export const useReactCalendar = <
 
       calendarRef.current.updateEvent({ ...event, color });
     },
+    useViewEvents: () => {
+      const dates = useStore(storeRef.current, (s) => s.dates);
+      const startAt = dates[0]?.date!;
+      const endAt = dates[dates.length - 1]?.date!;
+
+      const events = useStore(storeRef.current, (s) =>
+        s.events.filter((event) =>
+          isDatesBetween(
+            new Date(new Date(startAt).setHours(0, 0, 0, 0)),
+            new Date(new Date(endAt).setHours(23, 59, 59, 999)),
+            event.startAt,
+            event.endAt
+          )
+        )
+      );
+
+      return React.useMemo(
+        () =>
+          events.reduce<CalendarEventWithOverlap<TEvent>[]>((acc, event) => {
+            const prevEvent = acc[acc.length - 1];
+
+            // I think this is one of the most efficient ways to calculate the overlap
+            // and the left position of an event
+            if (
+              prevEvent &&
+              prevEvent.startAt.getTime() <= event.startAt.getTime() &&
+              prevEvent.endAt.getTime() > event.startAt.getTime()
+            ) {
+              const overlap = prevEvent.overlap + 1;
+
+              return [
+                ...acc,
+                {
+                  ...event,
+                  overlap
+                }
+              ];
+            }
+
+            return [
+              ...acc,
+              {
+                ...event,
+                overlap: 0
+              }
+            ];
+          }, []),
+        [events]
+      );
+    },
+    useDayEvents: (date: Date) => {
+      const startAt = new Date(new Date(date).setHours(0, 0, 0, 0));
+      const endAt = new Date(new Date(date).setHours(23, 59, 59, 999));
+      return useStore(storeRef.current, (s) =>
+        s.events.filter((event) =>
+          isDatesBetween(startAt, endAt, event.startAt, event.endAt)
+        )
+      );
+    },
+    useViewAnimation: () => {
+      return useStoreEffect(
+        storeRef.current,
+        (s) => s.date,
+        (state, previousState) => {
+          if (storeRef.current.state.layout.disableAnimation) {
+            return;
+          }
+
+          const view = storeRef.current.state.viewRef.current;
+
+          if (!view) {
+            return;
+          }
+
+          if (formatDate(state.date) === formatDate(previousState.date)) {
+            return;
+          }
+
+          if (state.date > previousState.date) {
+            view.classList.add(
+              "animate-in",
+              "slide-in-from-right-1/4",
+              "fade-in",
+              "duration-300"
+            );
+            const timeout = setTimeout(() => {
+              view.classList.remove(
+                "animate-in",
+                "slide-in-from-right-1/4",
+                "fade-in",
+                "duration-300"
+              );
+            }, 300);
+
+            return () => clearTimeout(timeout);
+          }
+
+          if (state.date < previousState.date) {
+            view.classList.add(
+              "animate-in",
+              "slide-in-from-left-1/4",
+              "fade-in",
+              "duration-300"
+            );
+            const timeout = setTimeout(() => {
+              view.classList.remove(
+                "animate-in",
+                "slide-in-from-left-1/4",
+                "fade-in",
+                "duration-300"
+              );
+            }, 300);
+
+            return () => clearTimeout(timeout);
+          }
+          return;
+        }
+      );
+    },
+    useViewAutoScroll: () => {
+      return useStoreEffect(
+        storeRef.current,
+        (s) =>
+          s.isDragging ||
+          s.isResizingTop ||
+          s.isResizingBottom ||
+          s.isSelecting,
+        (state) => {
+          const view = storeRef.current.state.viewRef.current;
+
+          if (!view) {
+            return;
+          }
+
+          if (
+            !state.isDragging &&
+            !state.isResizingTop &&
+            !state.isResizingBottom &&
+            !state.isSelecting
+          ) {
+            return;
+          }
+
+          const offset = 100;
+          const scrollSpeed = 2;
+          let scroll = window.scrollY;
+
+          const handleMouseMove = (e: MouseEvent) => {
+            const { clientY } = e;
+
+            const top = view.offsetTop + offset;
+            const bottom = window.innerHeight - offset;
+
+            if (clientY < top) {
+              const speed = scrollSpeed * Math.abs(clientY - top);
+
+              scroll = Math.max(scroll - speed, 0);
+
+              window.scrollTo({ top: scroll, behavior: "smooth" });
+            } else if (clientY > bottom) {
+              const speed = scrollSpeed * Math.abs(clientY - bottom);
+
+              scroll = Math.min(scroll + speed, document.body.scrollHeight);
+
+              window.scrollTo({ top: scroll, behavior: "smooth" });
+            }
+          };
+
+          window.addEventListener("mousemove", handleMouseMove);
+          window.addEventListener("dragover", handleMouseMove);
+
+          return () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("dragover", handleMouseMove);
+          };
+        }
+      );
+    },
 
     // Drag feature
     getIsDragging: () => storeRef.current.state.isDragging,
@@ -283,6 +468,9 @@ export const useReactCalendar = <
         draggingEvent: null,
         isDragging: false
       }));
+    },
+    useIsDraggingEvent: (eventId: string) => {
+      return useStore(storeRef.current, (s) => s.draggingEvent?.id === eventId);
     },
 
     // Resize feature
@@ -318,6 +506,9 @@ export const useReactCalendar = <
         isResizingTop: false,
         isResizingBottom: false
       }));
+    },
+    useIsResizingEvent: (eventId: string) => {
+      return useStore(storeRef.current, (s) => s.resizingEvent?.id === eventId);
     },
 
     // Selection feature
@@ -366,6 +557,50 @@ export const useReactCalendar = <
         ...state,
         activeEvent: null
       }));
+    },
+    useActiveEventKeyboardEvents: () => {
+      return useStoreEffect(
+        storeRef.current,
+        (state) => state.activeEvent,
+        (s) => {
+          if (s.activeEvent) {
+            const handler = (e: KeyboardEvent) => {
+              // Delete event
+              if (e.key === "Delete") {
+                e.preventDefault();
+                calendarRef.current.removeEvent(s.activeEvent?.id!);
+                return;
+              }
+              // Duplicate event
+              if (e.key === "d" && e.ctrlKey) {
+                e.preventDefault();
+                calendarRef.current.duplicateEvent(s.activeEvent?.id!);
+                calendarRef.current.clearActiveEvent();
+                return;
+              }
+              // Copy event
+              if (e.key === "c" && e.ctrlKey) {
+                e.preventDefault();
+                calendarRef.current.copyEvent(s.activeEvent?.id!);
+                return;
+              }
+              // Cut event
+              if (e.key === "x" && e.ctrlKey) {
+                e.preventDefault();
+                calendarRef.current.cutEvent(s.activeEvent?.id!);
+                return;
+              }
+            };
+            window.addEventListener("keydown", handler);
+            return () => window.removeEventListener("keydown", handler);
+          }
+
+          return;
+        }
+      );
+    },
+    useIsActiveEvent: (eventId: string) => {
+      return useStore(storeRef.current, (s) => s.activeEvent?.id === eventId);
     },
 
     // Active section feature
@@ -417,6 +652,9 @@ export const useReactCalendar = <
             }))
         }
       });
+    },
+    useIsCuttedEvent: (eventId: string) => {
+      return useStore(storeRef.current, (s) => s.cuttedEvent?.id === eventId);
     },
     pasteEvent: ({ startAt }: { startAt: Date }) => {
       const { copiedEvent, cuttedEvent } = storeRef.current.state;

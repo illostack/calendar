@@ -1,17 +1,21 @@
 "use client";
 
-import { addWeeks, CalendarView, getWeekDays } from "@illostack/react-calendar";
+import {
+  addWeeks,
+  createCalendarView,
+  getWeekDays
+} from "@illostack/react-calendar";
 import { CalendarDaysViewTemplate } from "@illostack/react-calendar-day";
 
 const VIEW_ID = "week";
 type CalendarWeekMeta = Record<string, unknown>;
 type CalendarWeekConfiguration = Record<string, unknown>;
 
-const view: CalendarView<
+const view = createCalendarView<
   typeof VIEW_ID,
   CalendarWeekMeta,
   CalendarWeekConfiguration
-> = {
+>({
   id: VIEW_ID,
   content: CalendarDaysViewTemplate,
   viewDatesFn(date, weekStartsOn) {
@@ -30,6 +34,6 @@ const view: CalendarView<
   configure() {
     return this!;
   }
-};
+});
 
 export { view as CalendarWeekView };

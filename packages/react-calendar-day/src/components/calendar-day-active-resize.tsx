@@ -3,69 +3,62 @@
 import {
   CalendarEvent,
   useCalendar,
-  useCalendarPosition,
-  useIsInDate
+  useDateFragments
 } from "@illostack/react-calendar";
-import React from "react";
+import * as React from "react";
+
+import { useDayViewPosition } from "../hooks/use-day-view-position";
 import { CalendarDayEventCardContent } from "./calendar-day-event-card-content";
 
 interface CalendarDayActiveResizeContentProps {
-  date: Date;
+  startAt: Date;
+  endAt: Date;
   resizingEvent: CalendarEvent;
+  isFirstFragment?: boolean;
 }
 
 const CalendarDayActiveResizeContent =
-  React.memo<CalendarDayActiveResizeContentProps>(({ date, resizingEvent }) => {
-    const { top, height, left, right } = useCalendarPosition(
-      date,
-      resizingEvent.startAt,
-      resizingEvent.endAt
-    );
+  React.memo<CalendarDayActiveResizeContentProps>(
+    ({ startAt, endAt, resizingEvent, isFirstFragment }) => {
+      const position = useDayViewPosition(startAt, endAt);
 
-    return (
-      <div
-        style={{
-          position: "absolute",
-          top,
-          left,
-          right,
-          height,
-          zIndex: 1,
-          padding: "1px"
-        }}
-      >
-        <CalendarDayEventCardContent event={resizingEvent} />
-      </div>
-    );
-  });
+      return (
+        <div className="absolute p-0.5" style={{ ...position }}>
+          <CalendarDayEventCardContent event={resizingEvent} />
+        </div>
+      );
+    }
+  );
 CalendarDayActiveResizeContent.displayName = "CalendarDayActiveResizeContent";
 
-interface CalendarDayActiveResizeProps {
-  date: Date;
-}
+interface CalendarDayActiveResizeProps {}
 
-const CalendarDayActiveResize = React.memo<CalendarDayActiveResizeProps>(
-  ({ date }) => {
-    const calendar = useCalendar();
-    const resizingEvent = calendar.useWatch((s) => s.resizingEvent);
-    const isInDate = useIsInDate(
-      date,
-      resizingEvent?.startAt,
-      resizingEvent?.endAt
-    );
+const CalendarDayActiveResize = React.memo<CalendarDayActiveResizeProps>(() => {
+  const calendar = useCalendar();
+  const resizingEvent = calendar.useWatch((s) => s.resizingEvent);
+  const fragments = useDateFragments(
+    resizingEvent?.startAt,
+    resizingEvent?.endAt
+  );
 
-    if (!resizingEvent || !isInDate) {
-      return null;
-    }
-
-    return (
-      <CalendarDayActiveResizeContent
-        date={date}
-        resizingEvent={resizingEvent}
-      />
-    );
+  if (!resizingEvent) {
+    return null;
   }
-);
+
+  return (
+    <React.Fragment>
+      {fragments.map((fragment, fragmentIdx) => (
+        <CalendarDayActiveResizeContent
+          key={fragment.id}
+          isFirstFragment={fragmentIdx === 0}
+          startAt={fragment.date}
+          endAt={fragment.endAt}
+          resizingEvent={resizingEvent}
+        />
+      ))}
+    </React.Fragment>
+  );
+});
 CalendarDayActiveResize.displayName = "CalendarDayActiveResize";
 
 export { CalendarDayActiveResize };

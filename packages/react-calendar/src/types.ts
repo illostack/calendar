@@ -64,6 +64,7 @@ export type CalendarTranslations = {
     next: string;
     range: string;
     more: string;
+    "go-to": string;
   };
   form: {
     save: string;
@@ -197,18 +198,13 @@ export type CalendarEvent<
 } & Omit<TEvent, "id" | "summary" | "startAt" | "endAt" | "color"> &
   Partial<GoogleCalendarEvent>;
 
-export type CalendarEventPosition = {
-  position: "absolute";
-  top: number;
-  height: number;
-  left: number | string;
-  right: number | string;
+export type CalendarEventOverlap = {
   overlap: number;
 };
 
-export type CalendarEventWithPosition<
+export type CalendarEventWithOverlap<
   TEvent extends CalendarProvidedEvent = CalendarProvidedEvent
-> = CalendarEvent<TEvent> & CalendarEventPosition;
+> = CalendarEvent<TEvent> & CalendarEventOverlap;
 
 export type CalendarProvidedEvent = {
   id: string;
@@ -251,6 +247,7 @@ export interface CalendarState<
     TViews[number]["meta"],
     Parameters<TViews[number]["configure"]>[0]
   >;
+  viewRef: React.RefObject<HTMLDivElement | null>;
 
   // Formatters
   formatters: CalendarFormatters;
@@ -272,6 +269,7 @@ export interface CalendarState<
     endOffset: number;
     calendarHeight: number;
     hours: number[];
+    disableAnimation: boolean;
   };
 
   // Device configuration
@@ -335,6 +333,7 @@ export interface CalendarApi<
     viewId: CalendarViewId,
     viewConfiguration?: CalendarViewConfiguration
   ) => void;
+  viewRef: CalendarState<TEvent, TViews>["viewRef"];
 
   // Date feature
   getDate: () => CalendarState<TEvent, TViews>["date"];
@@ -365,6 +364,10 @@ export interface CalendarApi<
     eventId: string,
     color: CalendarEvent<TEvent>["color"]
   ) => void;
+  useViewEvents: () => CalendarEventWithOverlap<TEvent>[];
+  useDayEvents: (date: Date) => CalendarEvent<TEvent>[];
+  useViewAnimation: () => void;
+  useViewAutoScroll: () => void;
 
   // Drag feature
   getIsDragging: () => CalendarState<TEvent, TViews>["isDragging"];
@@ -372,6 +375,7 @@ export interface CalendarApi<
   startDragging: (event: CalendarEvent<TEvent>) => void;
   updateDragging: (event: CalendarEvent<TEvent>) => void;
   stopDragging: () => void;
+  useIsDraggingEvent: (eventId: string) => boolean;
 
   // Resize feature
   getIsResizingTop: () => CalendarState<TEvent, TViews>["isResizingTop"];
@@ -381,6 +385,7 @@ export interface CalendarApi<
   startResizingBottom: (event: CalendarEvent<TEvent>) => void;
   updateResizing: (event: CalendarEvent<TEvent>) => void;
   stopResizing: () => void;
+  useIsResizingEvent: (eventId: string) => boolean;
 
   // Selection feature
   getIsSelecting: () => CalendarState<TEvent, TViews>["isSelecting"];
@@ -394,6 +399,8 @@ export interface CalendarApi<
   getActiveEvent: () => CalendarState<TEvent, TViews>["activeEvent"];
   activateEvent: (eventId: string) => void;
   clearActiveEvent: () => void;
+  useActiveEventKeyboardEvents: () => void;
+  useIsActiveEvent: (eventId: string) => boolean;
 
   // Active section feature
   getActiveSection: () => CalendarState<TEvent, TViews>["activeSection"];
@@ -404,6 +411,7 @@ export interface CalendarApi<
   getCuttedEvent: () => CalendarState<TEvent, TViews>["cuttedEvent"];
   getCopiedEvent: () => CalendarState<TEvent, TViews>["copiedEvent"];
   cutEvent: (eventId: string) => void;
+  useIsCuttedEvent: (eventId: string) => boolean;
   copyEvent: (eventId: string) => void;
   pasteEvent: ({ startAt }: { startAt: Date }) => void;
 
@@ -488,6 +496,11 @@ export interface CalendarOptions<
    * @default "dialog"
    */
   formView?: "dialog" | "sheet";
+  /**
+   * Disable animation
+   * @default false
+   */
+  disableAnimation?: boolean;
 
   onViewChange?: (
     view: CalendarView<

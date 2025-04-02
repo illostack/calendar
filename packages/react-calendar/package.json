@@ -1,11 +1,14 @@
 {
   "name": "@illostack/react-calendar",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.0",
   "keywords": [],
   "description": "React Calendar",
   "author": "illodev",
   "license": "MIT",
   "exports": "./src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/illostack/calendar.git",
@@ -13,28 +16,21 @@
   },
   "homepage": "https://github.com/illostack/calendar",
   "scripts": {
-    "build": "tsc"
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
   },
-  "type": "module",
-  "files": [
-    "build",
-    "src"
-  ],
   "dependencies": {
-    "@dnd-kit/abstract": "^0.0.9",
-    "@dnd-kit/dom": "^0.0.9",
-    "@dnd-kit/react": "^0.0.9",
     "@hookform/resolvers": "^3.10.0",
-    "@illostack/react-calendar-ui": "workspace:*",
     "@illostack/react-store": "workspace:*",
-    "modifiers": "link:@dnd-kit/dom/modifiers",
-    "react-hook-form": "^7.54.2",
-    "zod": "^3.24.1"
+    "@illostack/react-calendar-ui": "workspace:*",
+    "react-hook-form": "^7.55.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@illostack/eslint-config": "workspace:*",
+    "@illostack/typescript-config": "workspace:*",
     "@types/react": "^19.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
-  },
-  "packageManager": "pnpm@9.9.0"
+  }
 }

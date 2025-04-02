@@ -3,8 +3,9 @@
 import { cn } from "@illostack/react-calendar-ui";
 import * as React from "react";
 
+import { useCurrentDate } from "../hooks/use-current-date";
 import { isSameDay } from "../lib/time";
-import { useCalendar, useCurrentDate } from "./calendar";
+import { useCalendar } from "./calendar";
 
 type CalendarTimeIndicatorProps = object;
 

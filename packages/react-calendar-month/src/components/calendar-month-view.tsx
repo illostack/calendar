@@ -1,9 +1,8 @@
 "use client";
 
 import {
-  CalendarView,
   addMonths,
-  formatDate,
+  createCalendarView,
   getMonthDays,
   mergeRefs,
   useCalendar
@@ -11,13 +10,16 @@ import {
 import { cn } from "@illostack/react-calendar-ui";
 import * as React from "react";
 
+import { useCalendarMonthDrag } from "../hooks/use-calendar-month-drag";
 import { useCalendarMonthInteraction } from "../hooks/use-calendar-month-interaction";
 import { useCalendarMonthResize } from "../hooks/use-calendar-month-resize";
 import { useCalendarMonthSelection } from "../hooks/use-calendar-month-selection";
+import { CalendarMonthActiveDrag } from "./calendar-month-active-drag";
+import { CalendarMonthActiveResize } from "./calendar-month-active-resize";
+import { CalendarMonthActiveSection } from "./calendar-month-active-section";
+import { CalendarMonthActiveSelection } from "./calendar-month-active-selection";
 import { CalendarMonthContextMenu } from "./calendar-month-context-menu";
 import { CalendarMonthDay } from "./calendar-month-day";
-import { CalendarMonthDndProvider } from "./calendar-month-dnd";
-import { CalendarMonthDndOverlay } from "./calendar-month-dnd-overlay";
 import { CalendarMonthHeader } from "./calendar-month-header";
 
 interface CalendarMonthViewProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,102 +30,45 @@ const CalendarMonthView = React.forwardRef<
   HTMLDivElement,
   CalendarMonthViewProps
 >(({ className, ...props }, ref) => {
-  const viewRef = React.useRef<HTMLDivElement>(null);
   const calendar = useCalendar();
   const dates = calendar.useWatch((s) => s.dates);
   const selectionRef = useCalendarMonthSelection();
   const resizeRef = useCalendarMonthResize();
   const interactionRef = useCalendarMonthInteraction();
-
-  calendar.useEffect(
-    (s) => s.date,
-    (state, previousState) => {
-      const view = viewRef.current;
-
-      if (!view) {
-        return;
-      }
-
-      if (formatDate(state.date) === formatDate(previousState.date)) {
-        return;
-      }
-
-      if (state.date > previousState.date) {
-        view.classList.add(
-          "animate-in",
-          "slide-in-from-right-1/4",
-          "fade-in",
-          "duration-300"
-        );
-        const timeout = setTimeout(() => {
-          view.classList.remove(
-            "animate-in",
-            "slide-in-from-right-1/4",
-            "fade-in",
-            "duration-300"
-          );
-        }, 300);
-
-        return () => clearTimeout(timeout);
-      }
-
-      if (state.date < previousState.date) {
-        view.classList.add(
-          "animate-in",
-          "slide-in-from-left-1/4",
-          "fade-in",
-          "duration-300"
-        );
-        const timeout = setTimeout(() => {
-          view.classList.remove(
-            "animate-in",
-            "slide-in-from-left-1/4",
-            "fade-in",
-            "duration-300"
-          );
-        }, 300);
-
-        return () => clearTimeout(timeout);
-      }
-
-      return;
-    }
-  );
+  const dragRef = useCalendarMonthDrag();
 
   return (
     <div
-      ref={mergeRefs(viewRef, ref)}
+      ref={ref}
       className={cn("flex h-full flex-grow flex-col", className)}
       {...props}
     >
       <CalendarMonthHeader />
       <div className="relative flex h-0 flex-grow select-none flex-col">
-        <CalendarMonthDndProvider>
-          <CalendarMonthContextMenu>
-            <div
-              ref={mergeRefs(selectionRef, resizeRef, interactionRef)}
-              style={{
-                height: "100%",
-                width: "100%",
-                display: "grid",
-                gridTemplateColumns: `repeat(7, 1fr)`,
-                gridTemplateRows: `repeat(${dates.length / 7}, 1fr)`
-              }}
-            >
-              {dates.map((day, index) => {
-                return (
-                  <CalendarMonthDay
-                    key={index}
-                    index={index}
-                    date={day.date}
-                    isOutside={day.isOutside}
-                  />
-                );
-              })}
-            </div>
-          </CalendarMonthContextMenu>
-          <CalendarMonthDndOverlay />
-        </CalendarMonthDndProvider>
+        <CalendarMonthContextMenu>
+          <div
+            className="relative grid h-full w-full grid-cols-7 overflow-hidden"
+            ref={mergeRefs(selectionRef, resizeRef, interactionRef, dragRef)}
+            style={{
+              gridTemplateRows: `repeat(${dates.length / 7}, 1fr)`
+            }}
+          >
+            {dates.map((day, index) => {
+              return (
+                <CalendarMonthDay
+                  key={index}
+                  index={index}
+                  date={day.date}
+                  isOutside={day.isOutside}
+                />
+              );
+            })}
+            <CalendarMonthActiveResize />
+            <CalendarMonthActiveDrag />
+            <CalendarMonthActiveSection />
+            <CalendarMonthActiveSelection />
+          </div>
+        </CalendarMonthContextMenu>
       </div>
     </div>
   );
@@ -134,11 +79,11 @@ const VIEW_ID = "month";
 type CalendarMonthMeta = Record<string, unknown>;
 type CalendarMonthConfiguration = Record<string, unknown>;
 
-const view: CalendarView<
+const view = createCalendarView<
   typeof VIEW_ID,
   CalendarMonthMeta,
   CalendarMonthConfiguration
-> = {
+>({
   id: VIEW_ID,
   content: CalendarMonthView,
   viewDatesFn(date, weekStartsOn) {
@@ -154,6 +99,6 @@ const view: CalendarView<
   configure() {
     return this!;
   }
-};
+});
 
 export { view as CalendarMonthView };

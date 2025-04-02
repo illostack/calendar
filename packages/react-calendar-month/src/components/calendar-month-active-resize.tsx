@@ -2,43 +2,42 @@
 
 import {
   CalendarEvent,
-  isDateBetween,
+  DateFragmentType,
   useCalendar,
-  useIsInDate
+  useDateFragments
 } from "@illostack/react-calendar";
 import React from "react";
 
+import { cn } from "@illostack/react-calendar-ui";
+import { useMonthViewPosition } from "../hooks/use-month-view-position";
 import { CalendarMonthEventCardContent } from "./calendar-month-event-card-content";
 
 interface CalendarMonthActiveResizeContentProps {
   date: Date;
   resizingEvent: CalendarEvent;
+  fragmentType: DateFragmentType;
 }
 
 const CalendarMonthActiveResizeContent =
   React.memo<CalendarMonthActiveResizeContentProps>(
-    ({ date, resizingEvent }) => {
-      const isSameDate = React.useMemo(
-        () => isDateBetween(date, resizingEvent.startAt, resizingEvent.endAt),
-        [date, resizingEvent]
-      );
-
-      if (!isSameDate) {
-        return null;
-      }
+    ({ date, resizingEvent, fragmentType }) => {
+      const position = useMonthViewPosition(date);
 
       return (
         <div
-          style={{
-            position: "absolute",
-            top: "0",
-            left: "0",
-            right: "0",
-            zIndex: 2,
-            padding: "1px"
-          }}
+          className="absolute py-1"
+          style={{ ...position, height: "2.25rem" }}
         >
-          <CalendarMonthEventCardContent event={resizingEvent} />
+          <CalendarMonthEventCardContent
+            event={resizingEvent}
+            className={cn(
+              "shadow-none [&_*]:hidden",
+              fragmentType === "start" && "rounded-r-none",
+              fragmentType === "end" && "rounded-l-none before:hidden",
+              fragmentType == "full" && "",
+              fragmentType === "middle" && "rounded-none before:hidden"
+            )}
+          />
         </div>
       );
     }
@@ -46,29 +45,32 @@ const CalendarMonthActiveResizeContent =
 CalendarMonthActiveResizeContent.displayName =
   "CalendarMonthActiveResizeContent";
 
-interface CalendarMonthActiveResizeProps {
-  date: Date;
-}
+interface CalendarMonthActiveResizeProps {}
 
 const CalendarMonthActiveResize = React.memo<CalendarMonthActiveResizeProps>(
-  ({ date }) => {
+  () => {
     const calendar = useCalendar();
     const resizingEvent = calendar.useWatch((s) => s.resizingEvent);
-    const isInDate = useIsInDate(
-      date,
+    const fragments = useDateFragments(
       resizingEvent?.startAt,
       resizingEvent?.endAt
     );
 
-    if (!resizingEvent || !isInDate) {
+    if (!resizingEvent) {
       return null;
     }
 
     return (
-      <CalendarMonthActiveResizeContent
-        date={date}
-        resizingEvent={resizingEvent}
-      />
+      <React.Fragment>
+        {fragments.map((fragment) => (
+          <CalendarMonthActiveResizeContent
+            key={fragment.id}
+            date={fragment.date}
+            fragmentType={fragment.type}
+            resizingEvent={resizingEvent}
+          />
+        ))}
+      </React.Fragment>
     );
   }
 );

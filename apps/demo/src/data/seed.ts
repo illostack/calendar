@@ -17,7 +17,8 @@ const events: CalendarProvidedEvent[] = Array.from(
     const startAt = faker.date.recent({ days: 20, refDate: refDate });
     const endAt = new Date(startAt);
     endAt.setMinutes(
-      startAt.getMinutes() + minutes[Math.floor(Math.random() * minutes.length)]
+      startAt.getMinutes() +
+        minutes[Math.floor(Math.random() * minutes.length)]!
     );
     const color = faker.helpers.arrayElement(CALENDAR_COLORS);
 

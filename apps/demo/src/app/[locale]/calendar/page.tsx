@@ -114,7 +114,8 @@ export default function Page({
           previous: t("literals.previous"),
           next: t("literals.next"),
           range: t("literals.range"),
-          more: t("literals.more")
+          more: t("literals.more"),
+          "go-to": t("literals.go-to")
         },
         form: {
           save: t("form.save")

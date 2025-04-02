@@ -1,67 +1,59 @@
+"use client";
+
 import {
   CalendarSection,
   useCalendar,
-  useCalendarPosition,
-  useIsInDate
+  useDateFragments
 } from "@illostack/react-calendar";
 import * as React from "react";
+import { useDayViewPosition } from "../hooks/use-day-view-position";
 
 interface CalendarDayActiveSectionIndicatorProps {
-  date: Date;
+  startAt: Date;
+  endAt: Date;
   activeSection: CalendarSection;
 }
 
 const CalendarDayActiveSectionIndicator =
-  React.memo<CalendarDayActiveSectionIndicatorProps>(
-    ({ date, activeSection }) => {
-      const { top, height, left, right } = useCalendarPosition(
-        date,
-        activeSection.startAt,
-        activeSection.endAt
-      );
+  React.memo<CalendarDayActiveSectionIndicatorProps>(({ startAt, endAt }) => {
+    const position = useDayViewPosition(startAt, endAt);
 
-      return (
-        <div
-          style={{
-            position: "absolute",
-            zIndex: 1,
-            pointerEvents: "none",
-            top,
-            left,
-            right,
-            height,
-            backgroundColor: "hsl(var(--calendar-primary) / 0.4)"
-          }}
-        />
-      );
-    }
-  );
+    return (
+      <div
+        className="pointer-events-none absolute bg-[hsl(var(--calendar-primary)/0.1)]"
+        style={{ ...position }}
+      />
+    );
+  });
 CalendarDayActiveSectionIndicator.displayName =
   "CalendarDayActiveSectionIndicator";
 
-interface CalendarDayActiveSectionProps {
-  date: Date;
-}
+interface CalendarDayActiveSectionProps {}
 
 const CalendarDayActiveSection = React.memo<CalendarDayActiveSectionProps>(
-  ({ date }) => {
+  () => {
     const calendar = useCalendar();
     const activeSection = calendar.useWatch((s) => s.activeSection);
-    const isInDate = useIsInDate(
-      date,
+    const fragments = useDateFragments(
       activeSection?.startAt,
       activeSection?.endAt
     );
 
-    if (!activeSection || !isInDate) {
+    if (!activeSection) {
       return null;
     }
 
     return (
-      <CalendarDayActiveSectionIndicator
-        date={date}
-        activeSection={activeSection}
-      />
+      <React.Fragment>
+        {fragments.map((fragment) => (
+          <CalendarDayActiveSectionIndicator
+            key={fragment.id}
+            startAt={fragment.startAt}
+            endAt={fragment.endAt}
+            activeSection={activeSection}
+          />
+        ))}
+      </React.Fragment>
     );
   }
 );

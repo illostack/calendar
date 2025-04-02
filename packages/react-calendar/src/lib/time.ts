@@ -131,8 +131,6 @@ const getWeekDays = (date: Date, weekStartsOn: CalendarWeekStartsOn = 0) => {
   const start = startOfWeek(date, weekStartsOn);
   const end = endOfWeek(date, weekStartsOn);
 
-  console.log(start, end);
-
   const days: Date[] = [];
 
   let current = start;

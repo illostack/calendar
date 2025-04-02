@@ -89,7 +89,8 @@ export const resolveTranslations = (
     previous: translations.literals?.previous || "Previous",
     next: translations.literals?.next || "Next",
     range: translations.literals?.range || "Range",
-    more: translations.literals?.more || "More"
+    more: translations.literals?.more || "More",
+    "go-to": translations.literals?.["go-to"] || "Go to"
   },
   form: { save: translations.form?.save || "Save" },
   action: {
@@ -224,12 +225,14 @@ export const resolveLayout = ({
   rowHeight,
   minutesPerRow,
   startHour,
-  endHour
+  endHour,
+  disableAnimation
 }: {
   rowHeight: number;
   minutesPerRow: number;
   startHour: CalendarHours;
   endHour: CalendarHours;
+  disableAnimation: boolean;
 }) => {
   const endOffset = 1;
   const rowsPerHour = 60 / minutesPerRow;
@@ -246,6 +249,19 @@ export const resolveLayout = ({
     endHour,
     calendarHeight,
     endOffset,
-    hours
+    hours,
+    disableAnimation
   };
+};
+
+export const createCalendarView = <
+  TView extends CalendarViewId,
+  TViewMeta extends CalendarViewMeta,
+  TViewConfiguration extends CalendarViewConfiguration
+>(
+  options: CalendarView<TView, TViewMeta, TViewConfiguration>
+): CalendarView<TView, TViewMeta, TViewConfiguration> => {
+  // Include generic view options if needed ...
+
+  return options;
 };

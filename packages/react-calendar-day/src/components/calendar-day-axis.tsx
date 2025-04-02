@@ -33,8 +33,8 @@ const CalendarDayAxis = React.forwardRef<HTMLDivElement, CalendarDayAxisProps>(
                 </h3>
               </div>
             </div>
-            <div className="border-border/50 w-4 flex-none border-t" />
-            <div className="border-border/50 grid flex-grow border-t">
+            <div className="w-4 flex-none border-t border-[hsl(var(--calendar-border)/0.5)]" />
+            <div className="grid flex-grow border-t border-[hsl(var(--calendar-border)/0.5)]">
               <div
                 className="grid h-full w-full"
                 style={{
@@ -45,8 +45,9 @@ const CalendarDayAxis = React.forwardRef<HTMLDivElement, CalendarDayAxisProps>(
                   <div
                     key={index}
                     className={cn(
-                      "border-border/50 h-full border-l",
-                      isSameDay(date, new Date()) && "bg-muted/20"
+                      "h-full border-l border-[hsl(var(--calendar-border)/0.5)]",
+                      isSameDay(date, new Date()) &&
+                        "bg-[hsl(var(--calendar-accent)/0.3)]"
                     )}
                   />
                 ))}
