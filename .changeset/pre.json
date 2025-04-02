@@ -2,16 +2,16 @@
   "mode": "pre",
   "tag": "beta",
   "initialVersions": {
-    "demo": "0.0.1",
-    "@illostack/eslint-config": "0.0.1",
-    "@illostack/react-calendar": "0.0.1",
-    "@illostack/react-calendar-day": "0.0.1",
-    "@illostack/react-calendar-month": "0.0.1",
-    "@illostack/react-calendar-range": "0.0.1",
-    "@illostack/react-calendar-week": "0.0.1",
-    "@illostack/react-store": "0.0.1",
-    "@illostack/typescript-config": "0.0.1",
-    "@illostack/react-calendar-ui": "0.0.1"
+    "demo": "0.0.1-beta.0",
+    "@illostack/eslint-config": "0.0.1-beta.0",
+    "@illostack/react-calendar": "0.0.1-beta.0",
+    "@illostack/react-calendar-day": "0.0.1-beta.0",
+    "@illostack/react-calendar-month": "0.0.1-beta.0",
+    "@illostack/react-calendar-range": "0.0.1-beta.0",
+    "@illostack/react-calendar-week": "0.0.1-beta.0",
+    "@illostack/react-store": "0.0.1-beta.0",
+    "@illostack/typescript-config": "0.0.1-beta.0",
+    "@illostack/react-calendar-ui": "0.0.1-beta.0"
   },
   "changesets": []
 }
