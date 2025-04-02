@@ -10,12 +10,14 @@ const useSwipe = (
 
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
-      setTouchStart(e.touches[0].clientX);
+      if (e.touches.length > 0) {
+        setTouchStart(e.touches[0]!.clientX);
+      }
       setTouchEnd(null);
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      setTouchEnd(e.touches[0].clientX);
+      setTouchEnd(e.touches[0]!.clientX);
     };
 
     const handleTouchEnd = () => {
