@@ -3,16 +3,11 @@
 import {
   CalendarEventCard,
   isSameDay,
-  useCalendar,
-  useViewEvents
+  useCalendar
 } from "@illostack/react-calendar";
 import { Button, cn } from "@illostack/react-calendar-ui";
 import * as React from "react";
 
-import { CalendarMonthActiveResize } from "./calendar-month-active-resize";
-import { CalendarMonthActiveSection } from "./calendar-month-active-section";
-import { CalendarMonthActiveSelection } from "./calendar-month-active-selection";
-import { CalendarMonthDndIndicator } from "./calendar-month-dnd-indicator";
 import { CalendarMonthEventCardContent } from "./calendar-month-event-card-content";
 
 interface CalendarMonthViewEventsPanelProps {
@@ -22,10 +17,9 @@ interface CalendarMonthViewEventsPanelProps {
 const CalendarMonthViewEventsPanel =
   React.memo<CalendarMonthViewEventsPanelProps>(({ date }) => {
     const calendar = useCalendar();
-    const events = useViewEvents(date);
+    const events = calendar.useDayEvents(date);
     const firtsEvents = React.useMemo(() => events.slice(0, 3), [events]);
     const otherEventsLength = React.useMemo(() => events.length - 3, [events]);
-    const translations = calendar.getTranslations();
 
     return (
       <React.Fragment>
@@ -33,7 +27,6 @@ const CalendarMonthViewEventsPanel =
           <CalendarEventCard
             key={event.id}
             event={event}
-            date={date}
             resizeOrientation="horizontal"
           >
             <CalendarMonthEventCardContent event={event} />
@@ -44,10 +37,10 @@ const CalendarMonthViewEventsPanel =
             type="button"
             variant="link"
             size="sm"
-            className="pointer-events-auto relative z-[1] h-auto rounded-sm font-semibold"
+            className="pointer-events-auto h-auto font-semibold"
             onClick={() => calendar.changeDate(date, "day")}
           >
-            {otherEventsLength} {translations.literals.more}
+            {otherEventsLength} {calendar.getTranslations().literals.more}
           </Button>
         )}
       </React.Fragment>
@@ -110,14 +103,10 @@ const CalendarMonthDay: React.FC<CalendarMonthDayProps> = React.memo(
           <CalendarMonthDayButton date={date} />
         </div>
         <div className="flex-grow overflow-hidden">
-          <div className="relative grid h-full w-full grid-rows-4 gap-y-px">
-            <CalendarMonthActiveResize date={date} />
+          <div className="relative grid h-full w-full grid-rows-4 gap-y-px px-1 pb-1">
             <CalendarMonthViewEventsPanel date={date} />
           </div>
         </div>
-        <CalendarMonthActiveSection date={date} />
-        <CalendarMonthActiveSelection date={date} />
-        <CalendarMonthDndIndicator date={date} />
       </div>
     );
   }

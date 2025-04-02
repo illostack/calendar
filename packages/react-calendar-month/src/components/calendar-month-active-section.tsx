@@ -1,10 +1,13 @@
+"use client";
+
 import {
   CalendarSection,
-  isDateBetween,
   useCalendar,
-  useIsInDate
+  useDateFragments
 } from "@illostack/react-calendar";
 import * as React from "react";
+
+import { useMonthViewPosition } from "../hooks/use-month-view-position";
 
 interface CalendarMonthActiveSectionIndicatorProps {
   date: Date;
@@ -12,59 +15,44 @@ interface CalendarMonthActiveSectionIndicatorProps {
 }
 
 const CalendarMonthActiveSectionIndicator =
-  React.memo<CalendarMonthActiveSectionIndicatorProps>(
-    ({ date, activeSection }) => {
-      const isSameDate = React.useMemo(
-        () => isDateBetween(date, activeSection.startAt, activeSection.endAt),
-        [date, activeSection]
-      );
+  React.memo<CalendarMonthActiveSectionIndicatorProps>(({ date }) => {
+    const position = useMonthViewPosition(date);
 
-      if (!isSameDate) {
-        return null;
-      }
-
-      return (
-        <div
-          style={{
-            position: "absolute",
-            zIndex: 1,
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            pointerEvents: "none",
-            backgroundColor: "hsl(var(--calendar-primary) / 0.4)"
-          }}
-        />
-      );
-    }
-  );
+    return (
+      <div
+        className="pointer-events-none absolute bg-[hsl(var(--calendar-primary)/0.1)]"
+        style={{ ...position }}
+      />
+    );
+  });
 CalendarMonthActiveSectionIndicator.displayName =
   "CalendarMonthActiveSectionIndicator";
 
-interface CalendarMonthActiveSectionProps {
-  date: Date;
-}
+interface CalendarMonthActiveSectionProps {}
 
 const CalendarMonthActiveSection = React.memo<CalendarMonthActiveSectionProps>(
-  ({ date }) => {
+  () => {
     const calendar = useCalendar();
     const activeSection = calendar.useWatch((s) => s.activeSection);
-    const isInDate = useIsInDate(
-      date,
+    const fragments = useDateFragments(
       activeSection?.startAt,
       activeSection?.endAt
     );
 
-    if (!activeSection || !isInDate) {
+    if (!activeSection) {
       return null;
     }
 
     return (
-      <CalendarMonthActiveSectionIndicator
-        date={date}
-        activeSection={activeSection}
-      />
+      <React.Fragment>
+        {fragments.map((fragment) => (
+          <CalendarMonthActiveSectionIndicator
+            key={fragment.id}
+            date={fragment.date}
+            activeSection={activeSection}
+          />
+        ))}
+      </React.Fragment>
     );
   }
 );

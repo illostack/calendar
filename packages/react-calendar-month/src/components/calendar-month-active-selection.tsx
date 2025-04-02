@@ -2,11 +2,11 @@
 
 import {
   CalendarSection,
-  isDateBetween,
   useCalendar,
-  useIsInDate
+  useDateFragments
 } from "@illostack/react-calendar";
 import React from "react";
+import { useMonthViewPosition } from "../hooks/use-month-view-position";
 
 interface CalendarMonthActiveSelectionContentProps {
   date: Date;
@@ -14,52 +14,41 @@ interface CalendarMonthActiveSelectionContentProps {
 }
 
 const CalendarMonthActiveSelectionContent =
-  React.memo<CalendarMonthActiveSelectionContentProps>(
-    ({ date, selection }) => {
-      const isSameDate = React.useMemo(
-        () => isDateBetween(date, selection.startAt, selection.endAt),
-        [date, selection]
-      );
+  React.memo<CalendarMonthActiveSelectionContentProps>(({ date }) => {
+    const position = useMonthViewPosition(date);
 
-      if (!isSameDate) {
-        return null;
-      }
-
-      return (
-        <div
-          style={{
-            position: "absolute",
-            zIndex: 1,
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            pointerEvents: "none",
-            backgroundColor: "hsl(var(--calendar-primary) / 0.4)"
-          }}
-        />
-      );
-    }
-  );
+    return (
+      <div
+        className="pointer-events-none absolute bg-[hsl(var(--calendar-primary)/0.1)]"
+        style={{ ...position }}
+      />
+    );
+  });
 CalendarMonthActiveSelectionContent.displayName =
   "CalendarMonthActiveSelectionContent";
 
-interface CalendarMonthActiveSelectionProps {
-  date: Date;
-}
+interface CalendarMonthActiveSelectionProps {}
 
 const CalendarMonthActiveSelection =
-  React.memo<CalendarMonthActiveSelectionProps>(({ date }) => {
+  React.memo<CalendarMonthActiveSelectionProps>(() => {
     const calendar = useCalendar();
     const selection = calendar.useWatch((s) => s.selection);
-    const isInDate = useIsInDate(date, selection?.startAt, selection?.endAt);
+    const fragments = useDateFragments(selection?.startAt, selection?.endAt);
 
-    if (!selection || !isInDate) {
+    if (!selection) {
       return null;
     }
 
     return (
-      <CalendarMonthActiveSelectionContent date={date} selection={selection} />
+      <React.Fragment>
+        {fragments.map((fragment) => (
+          <CalendarMonthActiveSelectionContent
+            key={fragment.id}
+            date={fragment.date}
+            selection={selection}
+          />
+        ))}
+      </React.Fragment>
     );
   });
 CalendarMonthActiveSelection.displayName = "CalendarMonthActiveSelection";
