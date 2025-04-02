@@ -20,10 +20,11 @@ export const config = [
       unicorn: unicornPlugin
     },
     rules: {
-      "turbo/no-undeclared-env-vars": "warn",
+      "turbo/no-undeclared-env-vars": "off",
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-unused-vars": "error",
       "prefer-const": "error",
+      "react/prop-types": "off",
       "unicorn/filename-case": [
         "error",
         {

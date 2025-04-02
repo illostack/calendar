@@ -43,7 +43,8 @@ export const nextJsConfig = [
     rules: {
       ...pluginReactHooks.configs.recommended.rules,
       "react-hooks/exhaustive-deps": "error",
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off"
     }
   }
 ];
