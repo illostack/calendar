@@ -253,3 +253,15 @@ export const resolveLayout = ({
     disableAnimation
   };
 };
+
+export const createCalendarView = <
+  TView extends CalendarViewId,
+  TViewMeta extends CalendarViewMeta,
+  TViewConfiguration extends CalendarViewConfiguration
+>(
+  options: CalendarView<TView, TViewMeta, TViewConfiguration>
+): CalendarView<TView, TViewMeta, TViewConfiguration> => {
+  // Include generic view options if needed ...
+
+  return options;
+};
