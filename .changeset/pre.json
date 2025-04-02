@@ -8,10 +8,10 @@
     "@illostack/react-calendar-day": "0.0.1-beta.0",
     "@illostack/react-calendar-month": "0.0.1-beta.0",
     "@illostack/react-calendar-range": "0.0.1-beta.0",
+    "@illostack/react-calendar-ui": "0.0.1-beta.0",
     "@illostack/react-calendar-week": "0.0.1-beta.0",
     "@illostack/react-store": "0.0.1-beta.0",
-    "@illostack/typescript-config": "0.0.1-beta.0",
-    "@illostack/react-calendar-ui": "0.0.1-beta.0"
+    "@illostack/typescript-config": "0.0.1-beta.0"
   },
   "changesets": []
 }
