@@ -64,7 +64,16 @@ export default function Page({
 
         setState({
           view: id,
-          days: (meta.days ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+          days: ("days" in meta ? meta.days : 1) as
+            | 1
+            | 2
+            | 3
+            | 4
+            | 5
+            | 6
+            | 7
+            | 8
+            | 9
         });
       }}
       minutesPerRow={15}
