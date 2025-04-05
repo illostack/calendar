@@ -412,8 +412,10 @@ export const useReactCalendar = <
           }
 
           const offset = 100;
-          const scrollSpeed = 2;
+          const tolerance = 20;
+          const speed = 20;
           let scroll = window.scrollY;
+          let firstPosition = 0;
 
           const handleMouseMove = (e: MouseEvent) => {
             const { clientY } = e;
@@ -421,14 +423,22 @@ export const useReactCalendar = <
             const top = view.offsetTop + offset;
             const bottom = window.innerHeight - offset;
 
+            if (firstPosition === 0) {
+              firstPosition = clientY;
+            }
+
             if (clientY < top) {
-              const speed = scrollSpeed * Math.abs(clientY - top);
+              if (firstPosition - clientY < tolerance) {
+                return;
+              }
 
               scroll = Math.max(scroll - speed, 0);
 
               window.scrollTo({ top: scroll, behavior: "smooth" });
             } else if (clientY > bottom) {
-              const speed = scrollSpeed * Math.abs(clientY - bottom);
+              if (clientY - firstPosition < tolerance) {
+                return;
+              }
 
               scroll = Math.min(scroll + speed, document.body.scrollHeight);
 
