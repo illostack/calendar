@@ -335,6 +335,51 @@ export const resolveFormatters = (
       }).format(end)}`)
 });
 
+export const resolveShortcuts = (
+  formatters: Partial<
+    CalendarState<
+      CalendarProvidedEvent,
+      CalendarView<
+        CalendarViewId,
+        CalendarViewMeta,
+        CalendarViewConfiguration
+      >[]
+    >["shortcuts"]
+  >
+): CalendarState<
+  CalendarProvidedEvent,
+  CalendarView<CalendarViewId, CalendarViewMeta, CalendarViewConfiguration>[]
+>["shortcuts"] => ({
+  createEvent: formatters.createEvent || {
+    key: "c",
+    control: true
+  },
+  updateEvent: formatters.updateEvent || {
+    key: "e",
+    control: true
+  },
+  deleteEvent: formatters.deleteEvent || {
+    key: "Backspace",
+    control: true
+  },
+  duplicateEvent: formatters.duplicateEvent || {
+    key: "d",
+    control: true
+  },
+  copyEvent: formatters.copyEvent || {
+    key: "c",
+    control: true
+  },
+  cutEvent: formatters.cutEvent || {
+    key: "x",
+    control: true
+  },
+  pasteEvent: formatters.pasteEvent || {
+    key: "v",
+    control: true
+  }
+});
+
 export const getModifierKeyPrefix = () =>
   typeof window === "undefined"
     ? "Ctrl"

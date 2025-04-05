@@ -91,6 +91,24 @@ export type CalendarTranslations = {
     "event-not-found": string;
   };
 };
+
+export type CalendarShortcut = {
+  key: string;
+  control?: boolean;
+  shift?: boolean;
+  alt?: boolean;
+};
+
+export type CalendarShortcuts = {
+  createEvent: CalendarShortcut;
+  updateEvent: CalendarShortcut;
+  deleteEvent: CalendarShortcut;
+  duplicateEvent: CalendarShortcut;
+  copyEvent: CalendarShortcut;
+  cutEvent: CalendarShortcut;
+  pasteEvent: CalendarShortcut;
+};
+
 export type CalendarFormatters = {
   time: (date: Date) => string;
   date: (date: Date) => string;
@@ -255,6 +273,9 @@ export interface CalendarState<
 
   // Translations
   translations: CalendarTranslations;
+
+  // Shortcuts
+  shortcuts: CalendarShortcuts;
 
   // Other configurations
   formView: "dialog" | "sheet";
@@ -492,6 +513,7 @@ export interface CalendarOptions<
   weekStartsOn?: CalendarWeekStartsOn;
   formatters?: Partial<CalendarState<TEvent, TViews>["formatters"]>;
   translations?: Partial<CalendarTranslations>;
+  shortcuts?: Partial<CalendarShortcuts>;
   /**
    * Form view
    * @default "dialog"

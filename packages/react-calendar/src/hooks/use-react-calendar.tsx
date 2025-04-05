@@ -11,6 +11,7 @@ import {
   normalizeEvents,
   resolveFormatters,
   resolveLayout,
+  resolveShortcuts,
   resolveTranslations,
   sortEvents
 } from "../lib/calendar";
@@ -564,28 +565,54 @@ export const useReactCalendar = <
         (state) => state.activeEvent,
         (s) => {
           if (s.activeEvent) {
+            const deleteEvent = storeRef.current.state.shortcuts.deleteEvent;
+            const duplicateEvent =
+              storeRef.current.state.shortcuts.duplicateEvent;
+            const copyEvent = storeRef.current.state.shortcuts.copyEvent;
+            const cutEvent = storeRef.current.state.shortcuts.cutEvent;
+
             const handler = (e: KeyboardEvent) => {
               // Delete event
-              if (e.key === "Delete") {
+              if (
+                e.key === deleteEvent.key &&
+                (deleteEvent.control ? e.ctrlKey : true) &&
+                (deleteEvent.shift ? e.shiftKey : true) &&
+                (deleteEvent.alt ? e.altKey : true)
+              ) {
                 e.preventDefault();
                 calendarRef.current.removeEvent(s.activeEvent?.id!);
                 return;
               }
               // Duplicate event
-              if (e.key === "d" && e.ctrlKey) {
+              if (
+                e.key === duplicateEvent.key &&
+                (duplicateEvent.control ? e.ctrlKey : true) &&
+                (duplicateEvent.shift ? e.shiftKey : true) &&
+                (duplicateEvent.alt ? e.altKey : true)
+              ) {
                 e.preventDefault();
                 calendarRef.current.duplicateEvent(s.activeEvent?.id!);
                 calendarRef.current.clearActiveEvent();
                 return;
               }
               // Copy event
-              if (e.key === "c" && e.ctrlKey) {
+              if (
+                e.key === copyEvent.key &&
+                (copyEvent.control ? e.ctrlKey : true) &&
+                (copyEvent.shift ? e.shiftKey : true) &&
+                (copyEvent.alt ? e.altKey : true)
+              ) {
                 e.preventDefault();
                 calendarRef.current.copyEvent(s.activeEvent?.id!);
                 return;
               }
               // Cut event
-              if (e.key === "x" && e.ctrlKey) {
+              if (
+                e.key === cutEvent.key &&
+                (cutEvent.control ? e.ctrlKey : true) &&
+                (cutEvent.shift ? e.shiftKey : true) &&
+                (cutEvent.alt ? e.altKey : true)
+              ) {
                 e.preventDefault();
                 calendarRef.current.cutEvent(s.activeEvent?.id!);
                 return;
