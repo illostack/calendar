@@ -56,11 +56,11 @@ const CalendarDaysViewTemplate = React.forwardRef<
             ref={mergeRefs(selectionRef, resizeRef, interactionRef, dragRef)}
           >
             <CalendarDayTimeIndicator />
-            <CalendarDayActiveResize />
-            <CalendarDayActiveDrag />
             <CalendarDayActiveSection />
             <CalendarDayActiveSelection />
             <CalendarDayEvents />
+            <CalendarDayActiveResize />
+            <CalendarDayActiveDrag />
           </div>
         </CalendarDayContextMenu>
       </div>

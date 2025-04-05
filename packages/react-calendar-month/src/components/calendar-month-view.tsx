@@ -55,6 +55,8 @@ const CalendarMonthView = React.forwardRef<
               gridTemplateRows: `repeat(${dates.length / 7}, 1fr)`
             }}
           >
+            <CalendarMonthActiveSection />
+            <CalendarMonthActiveSelection />
             {dates.map((day, index) => {
               return (
                 <CalendarMonthDay
@@ -66,8 +68,6 @@ const CalendarMonthView = React.forwardRef<
             })}
             <CalendarMonthActiveResize />
             <CalendarMonthActiveDrag />
-            <CalendarMonthActiveSection />
-            <CalendarMonthActiveSelection />
           </div>
         </CalendarMonthContextMenu>
       </div>
