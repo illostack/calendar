@@ -110,9 +110,6 @@ const CalendarContent = React.memo<CalendarContentProps>((props) => {
   const calendar = useCalendar();
   const currentView = calendar.useWatch((s) => s.currentView);
 
-  calendar.useViewAnimation();
-  calendar.useViewAutoScroll();
-
   return <currentView.content ref={calendar.viewRef} {...props} />;
 });
 CalendarContent.displayName = "CalendarContent";

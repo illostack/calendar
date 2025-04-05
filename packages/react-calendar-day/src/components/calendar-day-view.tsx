@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  CalendarTimeIndicator,
+  CalendarEvent,
   addDays,
   createCalendarView,
   mergeRefs,
@@ -19,8 +19,10 @@ import { CalendarDayActiveSection } from "./calendar-day-active-section";
 import { CalendarDayActiveSelection } from "./calendar-day-active-selection";
 import { CalendarDayAxis } from "./calendar-day-axis";
 import { CalendarDayContextMenu } from "./calendar-day-context-menu";
+import { CalendarDayEventCardContent } from "./calendar-day-event-card-content";
 import { CalendarDayEvents } from "./calendar-day-events";
 import { CalendarDayHeader } from "./calendar-day-header";
+import { CalendarDayTimeIndicator } from "./calendar-day-time-indicator";
 
 interface CalendarDayViewProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -35,6 +37,9 @@ const CalendarDaysViewTemplate = React.forwardRef<
   const interactionRef = useCalendarDayInteraction();
   const dragRef = useCalendarDayDrag();
 
+  calendar.useViewAnimation();
+  calendar.useViewAutoScroll();
+
   return (
     <div ref={ref} {...props}>
       <CalendarDayHeader dates={dates} />
@@ -45,17 +50,17 @@ const CalendarDaysViewTemplate = React.forwardRef<
         }}
       >
         <CalendarDayAxis dates={dates} />
-        <CalendarTimeIndicator />
         <CalendarDayContextMenu>
           <div
-            className="relative h-full w-full overflow-hidden"
+            className="relative h-full w-full"
             ref={mergeRefs(selectionRef, resizeRef, interactionRef, dragRef)}
           >
+            <CalendarDayTimeIndicator />
+            <CalendarDayActiveSection />
+            <CalendarDayActiveSelection />
             <CalendarDayEvents />
             <CalendarDayActiveResize />
             <CalendarDayActiveDrag />
-            <CalendarDayActiveSection />
-            <CalendarDayActiveSelection />
           </div>
         </CalendarDayContextMenu>
       </div>
@@ -65,8 +70,12 @@ const CalendarDaysViewTemplate = React.forwardRef<
 CalendarDaysViewTemplate.displayName = "CalendarDaysViewTemplate";
 
 const VIEW_ID = "day";
-type CalendarDayMeta = Record<string, unknown>;
-type CalendarDayConfiguration = Record<string, unknown>;
+type CalendarDayMeta = {
+  chip: React.ComponentType<{ event: CalendarEvent }>;
+};
+type CalendarDayConfiguration = {
+  chip?: React.ComponentType<{ event: CalendarEvent }>;
+};
 
 const view = createCalendarView<
   typeof VIEW_ID,
@@ -84,9 +93,17 @@ const view = createCalendarView<
   decreaseFn(date) {
     return addDays(date, -1);
   },
-  meta: {},
-  configure() {
-    return this!;
+  meta: {
+    chip: CalendarDayEventCardContent
+  },
+  configure(props) {
+    const { chip } = props;
+
+    if (chip) {
+      this.meta.chip = chip;
+    }
+
+    return this;
   }
 });
 

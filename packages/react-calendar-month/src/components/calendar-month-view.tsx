@@ -37,6 +37,8 @@ const CalendarMonthView = React.forwardRef<
   const interactionRef = useCalendarMonthInteraction();
   const dragRef = useCalendarMonthDrag();
 
+  calendar.useViewAnimation();
+
   return (
     <div
       ref={ref}
@@ -53,11 +55,12 @@ const CalendarMonthView = React.forwardRef<
               gridTemplateRows: `repeat(${dates.length / 7}, 1fr)`
             }}
           >
+            <CalendarMonthActiveSection />
+            <CalendarMonthActiveSelection />
             {dates.map((day, index) => {
               return (
                 <CalendarMonthDay
                   key={index}
-                  index={index}
                   date={day.date}
                   isOutside={day.isOutside}
                 />
@@ -65,8 +68,6 @@ const CalendarMonthView = React.forwardRef<
             })}
             <CalendarMonthActiveResize />
             <CalendarMonthActiveDrag />
-            <CalendarMonthActiveSection />
-            <CalendarMonthActiveSelection />
           </div>
         </CalendarMonthContextMenu>
       </div>

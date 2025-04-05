@@ -26,12 +26,15 @@ const CalendarMonthActiveDragContent =
       return (
         <div
           className="absolute py-1"
-          style={{ ...position, height: "2.25rem" }}
+          style={{
+            ...position,
+            height: "2.25rem"
+          }}
         >
           <CalendarMonthEventCardContent
             event={draggingEvent}
             className={cn(
-              "shadow-none [&_*]:hidden",
+              "border-none shadow-none [&_*]:hidden",
               fragmentType === "start" && "rounded-r-none",
               fragmentType === "end" && "rounded-l-none before:hidden",
               fragmentType == "full" && "",

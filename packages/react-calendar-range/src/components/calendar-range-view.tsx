@@ -2,17 +2,23 @@
 
 import {
   addDays,
+  CalendarEvent,
   createCalendarView,
   getRangeDays
 } from "@illostack/react-calendar";
-import { CalendarDaysViewTemplate } from "@illostack/react-calendar-day";
+import {
+  CalendarDayEventCardContent,
+  CalendarDaysViewTemplate
+} from "@illostack/react-calendar-day";
 
 const VIEW_ID = "range";
 type CalendarRangeMeta = {
   days: number;
+  chip: React.ComponentType<{ event: CalendarEvent }>;
 };
 type CalendarRangeConfiguration = {
   days?: number;
+  chip?: React.ComponentType<{ event: CalendarEvent }>;
 };
 
 const view = createCalendarView<
@@ -21,6 +27,9 @@ const view = createCalendarView<
   CalendarRangeConfiguration
 >({
   id: VIEW_ID,
+  compositeId() {
+    return `${this.id}-${this.meta.days}`;
+  },
   content: CalendarDaysViewTemplate,
   viewDatesFn(date) {
     return getRangeDays(date, this.meta.days).map((date) => ({
@@ -35,10 +44,20 @@ const view = createCalendarView<
     return addDays(date, -this.meta.days);
   },
   meta: {
-    days: 1
+    days: 1,
+    chip: CalendarDayEventCardContent
   },
-  configure({ days = 1 }) {
-    this.meta.days = days;
+  configure(props) {
+    const { chip, days } = props;
+
+    if (chip) {
+      this.meta.chip = chip;
+    }
+
+    if (days) {
+      this.meta.days = days;
+    }
+
     return this;
   }
 });

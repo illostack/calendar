@@ -9,7 +9,6 @@ import {
 import * as React from "react";
 
 import { useDayViewPosition } from "../hooks/use-day-view-position";
-import { CalendarDayEventCardContent } from "./calendar-day-event-card-content";
 
 interface CalendarDayEventProps {
   startAt: Date;
@@ -20,6 +19,11 @@ interface CalendarDayEventProps {
 const CalendarDayEnvent = React.memo<CalendarDayEventProps>(
   ({ startAt, endAt, event }) => {
     const position = useDayViewPosition(startAt, endAt);
+    const calendar = useCalendar();
+    const Chip = React.useMemo(
+      () => calendar.getCurrentView().meta.chip as typeof CalendarEventCard,
+      [calendar]
+    );
 
     return (
       <CalendarEventCard
@@ -31,7 +35,7 @@ const CalendarDayEnvent = React.memo<CalendarDayEventProps>(
           width: `calc(${position.width} - var(--calendar-overlap-size, 5%) * ${event.overlap})`
         }}
       >
-        <CalendarDayEventCardContent event={event} />
+        <Chip event={event} />
       </CalendarEventCard>
     );
   }

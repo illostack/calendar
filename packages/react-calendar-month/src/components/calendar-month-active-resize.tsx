@@ -31,7 +31,7 @@ const CalendarMonthActiveResizeContent =
           <CalendarMonthEventCardContent
             event={resizingEvent}
             className={cn(
-              "shadow-none [&_*]:hidden",
+              "border-none shadow-none [&_*]:hidden",
               fragmentType === "start" && "rounded-r-none",
               fragmentType === "end" && "rounded-l-none before:hidden",
               fragmentType == "full" && "",

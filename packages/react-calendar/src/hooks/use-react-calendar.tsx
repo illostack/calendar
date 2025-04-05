@@ -11,6 +11,7 @@ import {
   normalizeEvents,
   resolveFormatters,
   resolveLayout,
+  resolveShortcuts,
   resolveTranslations,
   sortEvents
 } from "../lib/calendar";
@@ -31,7 +32,7 @@ import {
 
 const DEFAULT_LOCALE = "en-US";
 const DEFAULT_WEEK_STARTS_ON = 0;
-const DEFAULT_ROW_HEIGHT = 16;
+const DEFAULT_ROW_HEIGHT = 24;
 const DEFAULT_MINUTES_PER_ROW = 15;
 const DEFAULT_START_HOUR = 0;
 const DEFAULT_END_HOUR = 23;
@@ -70,6 +71,7 @@ export const useReactCalendar = <
   endHour = DEFAULT_END_HOUR,
   defaultEventDuration = DEFAULT_DEFAULT_EVENT_DURATION,
   translations = {},
+  shortcuts = {},
 
   onViewChange,
   onDateChange,
@@ -113,6 +115,7 @@ export const useReactCalendar = <
         formatters: resolveFormatters(formatters, locale),
         defaultEventDuration,
         translations: resolveTranslations(translations),
+        shortcuts: resolveShortcuts(shortcuts),
         draggingEvent: null,
         isDragging: false,
         isResizingTop: false,
@@ -409,8 +412,10 @@ export const useReactCalendar = <
           }
 
           const offset = 100;
-          const scrollSpeed = 2;
+          const tolerance = 20;
+          const speed = 20;
           let scroll = window.scrollY;
+          let firstPosition = 0;
 
           const handleMouseMove = (e: MouseEvent) => {
             const { clientY } = e;
@@ -418,14 +423,22 @@ export const useReactCalendar = <
             const top = view.offsetTop + offset;
             const bottom = window.innerHeight - offset;
 
+            if (firstPosition === 0) {
+              firstPosition = clientY;
+            }
+
             if (clientY < top) {
-              const speed = scrollSpeed * Math.abs(clientY - top);
+              if (firstPosition - clientY < tolerance) {
+                return;
+              }
 
               scroll = Math.max(scroll - speed, 0);
 
               window.scrollTo({ top: scroll, behavior: "smooth" });
             } else if (clientY > bottom) {
-              const speed = scrollSpeed * Math.abs(clientY - bottom);
+              if (clientY - firstPosition < tolerance) {
+                return;
+              }
 
               scroll = Math.min(scroll + speed, document.body.scrollHeight);
 
@@ -564,28 +577,54 @@ export const useReactCalendar = <
         (state) => state.activeEvent,
         (s) => {
           if (s.activeEvent) {
+            const deleteEvent = storeRef.current.state.shortcuts.deleteEvent;
+            const duplicateEvent =
+              storeRef.current.state.shortcuts.duplicateEvent;
+            const copyEvent = storeRef.current.state.shortcuts.copyEvent;
+            const cutEvent = storeRef.current.state.shortcuts.cutEvent;
+
             const handler = (e: KeyboardEvent) => {
               // Delete event
-              if (e.key === "Delete") {
+              if (
+                e.key === deleteEvent.key &&
+                (deleteEvent.control ? e.ctrlKey : true) &&
+                (deleteEvent.shift ? e.shiftKey : true) &&
+                (deleteEvent.alt ? e.altKey : true)
+              ) {
                 e.preventDefault();
                 calendarRef.current.removeEvent(s.activeEvent?.id!);
                 return;
               }
               // Duplicate event
-              if (e.key === "d" && e.ctrlKey) {
+              if (
+                e.key === duplicateEvent.key &&
+                (duplicateEvent.control ? e.ctrlKey : true) &&
+                (duplicateEvent.shift ? e.shiftKey : true) &&
+                (duplicateEvent.alt ? e.altKey : true)
+              ) {
                 e.preventDefault();
                 calendarRef.current.duplicateEvent(s.activeEvent?.id!);
                 calendarRef.current.clearActiveEvent();
                 return;
               }
               // Copy event
-              if (e.key === "c" && e.ctrlKey) {
+              if (
+                e.key === copyEvent.key &&
+                (copyEvent.control ? e.ctrlKey : true) &&
+                (copyEvent.shift ? e.shiftKey : true) &&
+                (copyEvent.alt ? e.altKey : true)
+              ) {
                 e.preventDefault();
                 calendarRef.current.copyEvent(s.activeEvent?.id!);
                 return;
               }
               // Cut event
-              if (e.key === "x" && e.ctrlKey) {
+              if (
+                e.key === cutEvent.key &&
+                (cutEvent.control ? e.ctrlKey : true) &&
+                (cutEvent.shift ? e.shiftKey : true) &&
+                (cutEvent.alt ? e.altKey : true)
+              ) {
                 e.preventDefault();
                 calendarRef.current.cutEvent(s.activeEvent?.id!);
                 return;
