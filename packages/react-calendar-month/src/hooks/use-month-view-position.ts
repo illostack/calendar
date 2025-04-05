@@ -7,7 +7,9 @@ import { computePositionFromTime } from "../lib/utils";
 
 const useMonthViewPosition = (date: Date) => {
   const calendar = useCalendar();
-  const view = calendar.useWatch((s) => s.view);
+  const view = calendar.useWatch((s) =>
+    s.currentView.compositeId ? s.currentView.compositeId() : s.currentView.id
+  );
 
   return React.useMemo(() => {
     return computePositionFromTime(date, calendar);
