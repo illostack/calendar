@@ -36,6 +36,9 @@ const CalendarDaysViewTemplate = React.forwardRef<
   const interactionRef = useCalendarDayInteraction();
   const dragRef = useCalendarDayDrag();
 
+  calendar.useViewAnimation();
+  calendar.useViewAutoScroll();
+
   return (
     <div ref={ref} {...props}>
       <CalendarDayHeader dates={dates} />
