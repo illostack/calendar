@@ -25,7 +25,7 @@ const CalendarMonthEventCardContent = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "ring-foreground/5 pointer-events-none relative flex h-full w-full select-none flex-row items-center justify-between gap-2 overflow-hidden rounded-[calc(var(--calendar-radius)*0.5)] p-2 text-[0.7rem] shadow-md ring-1 before:absolute before:inset-y-1.5 before:left-1.5 before:w-1 before:rounded-[calc(var(--calendar-radius)*0.5)] [&_div:first-child]:line-clamp-1 [&_div:first-child]:flex-grow [&_div:last-child]:flex-none",
+        "pointer-events-none relative flex h-full w-full select-none flex-row items-center justify-between gap-2 overflow-hidden rounded-[calc(var(--calendar-radius)*0.5)] p-2 text-[0.7rem] shadow-md [&_div:first-child]:line-clamp-1 [&_div:first-child]:flex-grow [&_div:last-child]:flex-none",
         calendarEventCardVariants({
           color: event.color,
           className
