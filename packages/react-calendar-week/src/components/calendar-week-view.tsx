@@ -2,14 +2,22 @@
 
 import {
   addWeeks,
+  CalendarEvent,
   createCalendarView,
   getWeekDays
 } from "@illostack/react-calendar";
-import { CalendarDaysViewTemplate } from "@illostack/react-calendar-day";
+import {
+  CalendarDayEventCardContent,
+  CalendarDaysViewTemplate
+} from "@illostack/react-calendar-day";
 
 const VIEW_ID = "week";
-type CalendarWeekMeta = Record<string, unknown>;
-type CalendarWeekConfiguration = Record<string, unknown>;
+type CalendarWeekMeta = {
+  chip: React.ComponentType<{ event: CalendarEvent }>;
+};
+type CalendarWeekConfiguration = {
+  chip?: React.ComponentType<{ event: CalendarEvent }>;
+};
 
 const view = createCalendarView<
   typeof VIEW_ID,
@@ -30,9 +38,17 @@ const view = createCalendarView<
   decreaseFn(date) {
     return addWeeks(date, -1);
   },
-  meta: {},
-  configure() {
-    return this!;
+  meta: {
+    chip: CalendarDayEventCardContent
+  },
+  configure(props) {
+    const { chip } = props;
+
+    if (chip) {
+      this.meta.chip = chip;
+    }
+
+    return this;
   }
 });
 
