@@ -22,6 +22,7 @@ import { CalendarDayContextMenu } from "./calendar-day-context-menu";
 import { CalendarDayEventCardContent } from "./calendar-day-event-card-content";
 import { CalendarDayEvents } from "./calendar-day-events";
 import { CalendarDayHeader } from "./calendar-day-header";
+import { CalendarDayTimeIndicator } from "./calendar-day-time-indicator";
 
 interface CalendarDayViewProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -49,17 +50,17 @@ const CalendarDaysViewTemplate = React.forwardRef<
         }}
       >
         <CalendarDayAxis dates={dates} />
-        <CalendarTimeIndicator />
         <CalendarDayContextMenu>
           <div
-            className="relative h-full w-full overflow-hidden"
+            className="relative h-full w-full"
             ref={mergeRefs(selectionRef, resizeRef, interactionRef, dragRef)}
           >
-            <CalendarDayEvents />
+            <CalendarDayTimeIndicator />
             <CalendarDayActiveResize />
             <CalendarDayActiveDrag />
             <CalendarDayActiveSection />
             <CalendarDayActiveSelection />
+            <CalendarDayEvents />
           </div>
         </CalendarDayContextMenu>
       </div>
