@@ -68,7 +68,7 @@ export default function Page({
         });
       }}
       minutesPerRow={15}
-      rowHeight={14}
+      rowHeight={24}
       startHour={0}
       endHour={23}
       onDateChange={(date) => {
