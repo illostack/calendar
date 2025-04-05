@@ -126,6 +126,7 @@ export type CalendarView<
   TViewConfiguration extends CalendarViewConfiguration
 > = {
   id: TView;
+  compositeId?: () => string;
   content: React.ElementType;
   viewDatesFn: (date: Date, weekStartsOn: CalendarWeekStartsOn) => ViewDate[];
   increaseFn: (date: Date) => Date;
