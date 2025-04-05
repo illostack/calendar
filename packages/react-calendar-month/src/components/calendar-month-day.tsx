@@ -83,19 +83,16 @@ const CalendarMonthDayButton = React.memo<CalendarMonthDayButtonProps>(
 CalendarMonthDayButton.displayName = "CalendarMonthDayButton";
 
 interface CalendarMonthDayProps {
-  index: number;
   date: Date;
   isOutside: boolean;
 }
 
 const CalendarMonthDay: React.FC<CalendarMonthDayProps> = React.memo(
-  ({ index, date, isOutside }) => {
+  ({ date, isOutside }) => {
     return (
       <div
         className={cn(
-          "pointer-events-none relative flex flex-col gap-1 overflow-hidden",
-          index % 7 === 0 ? "border-l-0" : "border-l",
-          index < 7 ? "border-t-0" : "border-t",
+          "ring-border/40 pointer-events-none relative flex flex-col gap-1 overflow-hidden ring-[1px]",
           isOutside ? "text-muted-foreground bg-muted/40" : "text-foreground"
         )}
       >
