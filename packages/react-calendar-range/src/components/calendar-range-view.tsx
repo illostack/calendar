@@ -21,6 +21,9 @@ const view = createCalendarView<
   CalendarRangeConfiguration
 >({
   id: VIEW_ID,
+  compositeId() {
+    return `${this.id}-${this.meta.days}`;
+  },
   content: CalendarDaysViewTemplate,
   viewDatesFn(date) {
     return getRangeDays(date, this.meta.days).map((date) => ({
