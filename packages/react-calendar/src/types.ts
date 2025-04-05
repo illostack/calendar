@@ -472,7 +472,7 @@ export interface CalendarOptions<
   views: TViews;
   /**
    * Row height in pixels
-   * @default 16
+   * @default 24
    */
   rowHeight?: number;
   /**
