@@ -71,6 +71,7 @@ export const useReactCalendar = <
   endHour = DEFAULT_END_HOUR,
   defaultEventDuration = DEFAULT_DEFAULT_EVENT_DURATION,
   translations = {},
+  shortcuts = {},
 
   onViewChange,
   onDateChange,
@@ -114,6 +115,7 @@ export const useReactCalendar = <
         formatters: resolveFormatters(formatters, locale),
         defaultEventDuration,
         translations: resolveTranslations(translations),
+        shortcuts: resolveShortcuts(shortcuts),
         draggingEvent: null,
         isDragging: false,
         isResizingTop: false,
