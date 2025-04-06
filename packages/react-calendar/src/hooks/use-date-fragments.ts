@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useCalendar } from "../components/calendar";
 import { addMinutes } from "../lib/time";
 
 export type DateFragmentType = "start" | "end" | "full" | "middle";
@@ -14,6 +15,13 @@ interface DateFragment {
 }
 
 const useDateFragments = (startAt?: Date, endAt?: Date): DateFragment[] => {
+  const calendar = useCalendar();
+  const dates = calendar.getDates();
+  const minDate = new Date(dates[0]?.date!.setHours(0, 0, 0, 0)!);
+  const maxDate = new Date(
+    dates[dates.length - 1]?.date!.setHours(23, 59, 59, 59)!
+  );
+
   const fragments = React.useMemo(() => {
     if (!startAt || !endAt) {
       return [];
@@ -24,12 +32,18 @@ const useDateFragments = (startAt?: Date, endAt?: Date): DateFragment[] => {
     const endDate = addMinutes(endAt, -1);
 
     while (currentDate <= endDate) {
+      if (currentDate < minDate || currentDate > maxDate) {
+        currentDate.setDate(currentDate.getDate() + 1);
+        currentDate.setHours(0, 0, 0, 0);
+        continue;
+      }
+
       if (
         currentDate.toDateString() === startAt.toDateString() &&
         currentDate.toDateString() === endDate.toDateString()
       ) {
         result.push({
-          id: `fragment-${currentDate.toISOString()}`,
+          id: `fragment-${currentDate.toISOString()}-${minDate.toISOString()}-${maxDate.toISOString()}`,
           type: "full",
           date: new Date(currentDate),
           startAt: new Date(startAt),
@@ -37,7 +51,7 @@ const useDateFragments = (startAt?: Date, endAt?: Date): DateFragment[] => {
         });
       } else if (currentDate.getDate() === startAt.getDate()) {
         result.push({
-          id: `fragment-${currentDate.toISOString()}`,
+          id: `fragment-${currentDate.toISOString()}-${minDate.toISOString()}-${maxDate.toISOString()}`,
           type: "start",
           date: new Date(currentDate),
           startAt: new Date(startAt),
@@ -45,7 +59,7 @@ const useDateFragments = (startAt?: Date, endAt?: Date): DateFragment[] => {
         });
       } else if (currentDate.getDate() === endDate.getDate()) {
         result.push({
-          id: `fragment-${currentDate.toISOString()}`,
+          id: `fragment-${currentDate.toISOString()}-${minDate.toISOString()}-${maxDate.toISOString()}`,
           type: "end",
           date: new Date(currentDate),
           startAt: new Date(new Date(currentDate).setHours(0, 0, 0, 0)),
@@ -53,7 +67,7 @@ const useDateFragments = (startAt?: Date, endAt?: Date): DateFragment[] => {
         });
       } else {
         result.push({
-          id: `fragment-${currentDate.toISOString()}`,
+          id: `fragment-${currentDate.toISOString()}-${minDate.toISOString()}-${maxDate.toISOString()}`,
           type: "middle",
           date: new Date(currentDate),
           startAt: new Date(new Date(currentDate).setHours(0, 0, 0, 0)),
@@ -66,7 +80,7 @@ const useDateFragments = (startAt?: Date, endAt?: Date): DateFragment[] => {
     }
 
     return result;
-  }, [startAt, endAt]);
+  }, [startAt, endAt, minDate, maxDate]);
 
   return fragments;
 };
