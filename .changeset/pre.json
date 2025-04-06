@@ -13,5 +13,5 @@
     "@illostack/react-store": "0.0.1-beta.1",
     "@illostack/typescript-config": "0.0.1-beta.1"
   },
-  "changesets": ["pretty-boxes-read"]
+  "changesets": ["pink-impalas-say", "pretty-boxes-read"]
 }
