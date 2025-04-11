@@ -25,8 +25,8 @@
     "@illostack/react-calendar": "workspace:*"
   },
   "devDependencies": {
-    "@illostack/eslint-config": "workspace:*",
-    "@illostack/typescript-config": "workspace:*",
+    "@illostack/eslint-config": "^0.0.1",
+    "@illostack/typescript-config": "^0.0.1",
     "@types/react": "^19.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
