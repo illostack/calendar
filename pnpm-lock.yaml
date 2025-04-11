@@ -154,8 +154,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@illostack/typescript-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.2
+        version: 0.0.2
       '@types/node':
         specifier: ^22.13.10
         version: 22.14.0
@@ -200,8 +200,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@illostack/typescript-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.2
+        version: 0.0.2
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -225,8 +225,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@illostack/typescript-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.2
+        version: 0.0.2
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -250,8 +250,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@illostack/typescript-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.2
+        version: 0.0.2
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -278,8 +278,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@illostack/typescript-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.2
+        version: 0.0.2
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -336,8 +336,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@illostack/typescript-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.2
+        version: 0.0.2
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -364,8 +364,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       '@illostack/typescript-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.2
+        version: 0.0.2
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -923,8 +923,8 @@ packages:
   '@illostack/react-store@0.0.1':
     resolution: {integrity: sha512-vDuKCJbrad98UtTrwMdAAECoMhIwo9gLGxDixsVxA/SnMajJ85r+cJZOS7IA4aJeTs2bgW6fvyMlZZDY9QDksA==}
 
-  '@illostack/typescript-config@0.0.1':
-    resolution: {integrity: sha512-GkbfCgZFZm7thH4aVreQEHYbms1/DARQr7CcmNSVRS6u19d928y9p0u12stqhLQIPPoilTsWA/IB4qAh0eD1mg==}
+  '@illostack/typescript-config@0.0.2':
+    resolution: {integrity: sha512-uafu5adVaVZQchqSwH5djN5pYPMIhfqGUMogp1h6ybPRZm4SiTkGAAT7W0PVL0DnGtWilYYgOyGuL6jEwRVZOg==}
 
   '@img/sharp-darwin-arm64@0.34.1':
     resolution: {integrity: sha512-pn44xgBtgpEbZsu+lWf2KNb6OAf70X68k+yk69Ic2Xz11zHR/w24/U49XT7AeRwJ0Px+mhALhU5LPci1Aymk7A==}
@@ -4768,7 +4768,7 @@ snapshots:
 
   '@illostack/react-store@0.0.1': {}
 
-  '@illostack/typescript-config@0.0.1': {}
+  '@illostack/typescript-config@0.0.2': {}
 
   '@img/sharp-darwin-arm64@0.34.1':
     optionalDependencies:
