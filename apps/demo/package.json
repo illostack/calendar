@@ -48,8 +48,8 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^9.6.0",
-    "@illostack/eslint-config": "workspace:*",
-    "@illostack/typescript-config": "workspace:*",
+    "@illostack/eslint-config": "^0.0.1",
+    "@illostack/typescript-config": "^0.0.2",
     "@types/node": "^22.13.10",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",

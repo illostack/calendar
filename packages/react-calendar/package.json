@@ -21,14 +21,14 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
-    "@illostack/react-store": "workspace:*",
+    "@illostack/react-store": "^0.0.1",
     "@illostack/react-calendar-ui": "workspace:*",
     "react-hook-form": "^7.55.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@illostack/eslint-config": "workspace:*",
-    "@illostack/typescript-config": "workspace:*",
+    "@illostack/eslint-config": "^0.0.1",
+    "@illostack/typescript-config": "^0.0.2",
     "@types/react": "^19.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
