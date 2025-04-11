@@ -57,58 +57,58 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react-calendar-week
       '@radix-ui/react-avatar':
-        specifier: ^1.1.3
+        specifier: ^1.1.4
         version: 1.1.4(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-collapsible':
-        specifier: ^1.1.3
+        specifier: ^1.1.4
         version: 1.1.4(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-dialog':
-        specifier: ^1.1.5
+        specifier: ^1.1.7
         version: 1.1.7(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-dropdown-menu':
-        specifier: ^2.1.6
+        specifier: ^2.1.7
         version: 2.1.7(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-label':
-        specifier: ^2.1.1
+        specifier: ^2.1.3
         version: 2.1.3(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-select':
-        specifier: ^2.1.6
+        specifier: ^2.1.7
         version: 2.1.7(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-separator':
-        specifier: ^1.1.2
+        specifier: ^1.1.3
         version: 1.1.3(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-slot':
-        specifier: ^1.1.1
+        specifier: ^1.2.0
         version: 1.2.0(@types/react@19.0.10)(react@19.1.0)
       '@radix-ui/react-tabs':
-        specifier: ^1.1.3
+        specifier: ^1.1.4
         version: 1.1.4(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-toggle':
-        specifier: ^1.1.2
+        specifier: ^1.1.3
         version: 1.1.3(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-toggle-group':
-        specifier: ^1.1.2
+        specifier: ^1.1.3
         version: 1.1.3(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-tooltip':
-        specifier: ^1.1.8
+        specifier: ^1.2.0
         version: 1.2.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@react-native-async-storage/async-storage':
         specifier: ^2.1.2
         version: 2.1.2(react-native@0.79.0(@babel/core@7.26.10)(@types/react@19.0.10)(react@19.1.0))
       '@tanstack/query-async-storage-persister':
-        specifier: ^5.70.0
+        specifier: ^5.73.1
         version: 5.73.1
       '@tanstack/react-query':
-        specifier: ^5.70.0
+        specifier: ^5.72.2
         version: 5.72.2(react@19.1.0)
       '@tanstack/react-query-devtools':
-        specifier: ^5.70.0
+        specifier: ^5.72.2
         version: 5.72.2(@tanstack/react-query@5.72.2(react@19.1.0))(react@19.1.0)
       '@tanstack/react-query-next-experimental':
-        specifier: ^5.70.0
+        specifier: ^5.72.2
         version: 5.72.2(@tanstack/react-query@5.72.2(react@19.1.0))(next@15.3.0(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       '@tanstack/react-query-persist-client':
-        specifier: ^5.70.0
+        specifier: ^5.73.1
         version: 5.73.1(@tanstack/react-query@5.72.2(react@19.1.0))(react@19.1.0)
       class-variance-authority:
         specifier: ^0.7.1
@@ -120,7 +120,7 @@ importers:
         specifier: ^0.474.0
         version: 0.474.0(react@19.1.0)
       next:
-        specifier: ^15.2.1
+        specifier: ^15.3.0
         version: 15.3.0(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-intl:
         specifier: ^4.0.2
@@ -132,13 +132,13 @@ importers:
         specifier: ^2.4.1
         version: 2.4.1(next@15.3.0(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       react:
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.0
       react-day-picker:
         specifier: ^8.10.1
         version: 8.10.1(date-fns@3.6.0)(react@19.1.0)
       react-dom:
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
       tailwind-merge:
         specifier: ^2.6.0
@@ -151,13 +151,13 @@ importers:
         specifier: ^9.6.0
         version: 9.6.0
       '@illostack/eslint-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.3
+        version: 0.0.3
       '@illostack/typescript-config':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: ^0.0.3
+        version: 0.0.3
       '@types/node':
-        specifier: ^22.13.10
+        specifier: ^22.14.0
         version: 22.14.0
       '@types/react':
         specifier: 19.0.10
@@ -166,7 +166,7 @@ importers:
         specifier: 19.0.4
         version: 19.0.4(@types/react@19.0.10)
       eslint:
-        specifier: ^9.23.0
+        specifier: ^9.24.0
         version: 9.24.0(jiti@2.4.2)
       postcss:
         specifier: ^8.5.3
@@ -197,11 +197,11 @@ importers:
         version: 3.24.2
     devDependencies:
       '@illostack/eslint-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.3
+        version: 0.0.3
       '@illostack/typescript-config':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: ^0.0.3
+        version: 0.0.3
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -222,11 +222,11 @@ importers:
         version: link:../react-calendar-ui
     devDependencies:
       '@illostack/eslint-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.3
+        version: 0.0.3
       '@illostack/typescript-config':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: ^0.0.3
+        version: 0.0.3
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -247,11 +247,11 @@ importers:
         version: link:../react-calendar-ui
     devDependencies:
       '@illostack/eslint-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.3
+        version: 0.0.3
       '@illostack/typescript-config':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: ^0.0.3
+        version: 0.0.3
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -275,11 +275,11 @@ importers:
         version: link:../react-calendar-ui
     devDependencies:
       '@illostack/eslint-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.3
+        version: 0.0.3
       '@illostack/typescript-config':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: ^0.0.3
+        version: 0.0.3
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -333,11 +333,11 @@ importers:
         version: 1.1.2(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
     devDependencies:
       '@illostack/eslint-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.3
+        version: 0.0.3
       '@illostack/typescript-config':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: ^0.0.3
+        version: 0.0.3
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -361,11 +361,11 @@ importers:
         version: link:../react-calendar-ui
     devDependencies:
       '@illostack/eslint-config':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.3
+        version: 0.0.3
       '@illostack/typescript-config':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: ^0.0.3
+        version: 0.0.3
       '@types/react':
         specifier: ^19.0.0
         version: 19.0.10
@@ -917,14 +917,14 @@ packages:
     resolution: {integrity: sha512-xeO57FpIu4p1Ri3Jq/EXq4ClRm86dVF2z/+kvFnyqVYRavTZmaFaUBbWCOuuTh0o/g7DSsk6kc2vrS4Vl5oPOQ==}
     engines: {node: '>=18.18'}
 
-  '@illostack/eslint-config@0.0.1':
-    resolution: {integrity: sha512-UOz8yh0wdC9R9V7uUs8Dt29T5vDyk8GxccN3fOstporppVdt58dYC+NxfeDXNZwIF9w37OmRRe7NkCNSaXX8gQ==}
+  '@illostack/eslint-config@0.0.3':
+    resolution: {integrity: sha512-X504ivpsQsJqrlpt1TfYFCM8SBqTlnFX6YaVdoCYhGCkUPiXfLFLyjX4T9T/LXaF8wtt72khk0hpH84rFAudoQ==}
 
   '@illostack/react-store@0.0.1':
     resolution: {integrity: sha512-vDuKCJbrad98UtTrwMdAAECoMhIwo9gLGxDixsVxA/SnMajJ85r+cJZOS7IA4aJeTs2bgW6fvyMlZZDY9QDksA==}
 
-  '@illostack/typescript-config@0.0.2':
-    resolution: {integrity: sha512-uafu5adVaVZQchqSwH5djN5pYPMIhfqGUMogp1h6ybPRZm4SiTkGAAT7W0PVL0DnGtWilYYgOyGuL6jEwRVZOg==}
+  '@illostack/typescript-config@0.0.3':
+    resolution: {integrity: sha512-dnetqw7oKAJSRFlgusmOWJK8dJqcNABB4pj6I5iqlx01QzKMK4uKUfrhoNdVXu9DecURl21V0N4gpJKTTV15ew==}
 
   '@img/sharp-darwin-arm64@0.34.1':
     resolution: {integrity: sha512-pn44xgBtgpEbZsu+lWf2KNb6OAf70X68k+yk69Ic2Xz11zHR/w24/U49XT7AeRwJ0Px+mhALhU5LPci1Aymk7A==}
@@ -4764,11 +4764,11 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.2': {}
 
-  '@illostack/eslint-config@0.0.1': {}
+  '@illostack/eslint-config@0.0.3': {}
 
   '@illostack/react-store@0.0.1': {}
 
-  '@illostack/typescript-config@0.0.2': {}
+  '@illostack/typescript-config@0.0.3': {}
 
   '@img/sharp-darwin-arm64@0.34.1':
     optionalDependencies:
